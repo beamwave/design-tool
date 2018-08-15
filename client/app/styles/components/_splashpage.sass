@@ -1,0 +1,361 @@
+
+.splash-page
+
+  header
+    display: grid
+    grid-auto-rows: max-content
+    // height: 100vh
+    // background-color: hsl(214, 60, 25)
+    
+    // falling letters
+    // overflow: hidden
+
+    .splash-nav
+      display: flex
+      align-items: center
+      justify-items: space-between
+      padding: 25px
+
+      p
+        font: italic 400 14px Asap, Helvetica, sans-serif
+        // color: $white-grey
+
+      .item
+        letter-spacing: 1px
+        text-transform: uppercase
+        font: 600 21px Asap, Helvetica, sans-serif
+        color: $sidebar-black
+        transition: .3s all ease-in-out
+
+        &:hover
+          // background: linear-gradient(40deg, $red, $orange)
+          // -webkit-background-clip: text
+          // -webkit-text-fill-color: transparent
+          color: $orange
+          // filter: brightness(125%)
+
+        &:first-of-type
+          margin-right: auto
+
+        &:not(:first-of-type)
+          margin: 0 10px
+
+//     .title-container
+//       display: grid
+//       grid-template-columns: repeat(2, max-content)
+//       align-self: center
+//       justify-self: center
+//       margin: 10vh 0 0
+//       text-transform: uppercase
+//       font: 600 60px Asap, Helvetica, sans-serif
+      
+//       .verb
+//         border-right: 3px solid #000
+//         margin: auto 15px
+//         width: max-content
+//         overflow: hidden
+//         white-space: nowrap
+//         letter-spacing: 1px
+//         animation: blink 0.5s infinite alternate
+//         color: $white
+
+//       .static
+//         color: $blue
+
+
+//     .easy-5
+//       display: grid
+//       grid-template-rows: repeat(2, max-content)
+//       width: 25vw
+//       max-width: 250px
+//       margin: 5px 50px 10px
+
+//       .group
+//         display: grid
+//         gri-column: 1
+//         grid-template-rows: repeat(2, max-content)
+//         grid-template-columns: repeat(2, 1fr)
+//         box-sizing: border-box
+
+//         label
+//           grid-column: 1 / span 2
+//           margin: 15px 0 8px
+//           font: 500 18px Asap, Helvetica, sans-serif
+//           color: $white
+
+//         input
+//           grid-column: 1 / span 2
+//           padding: 5px 10px 5px
+//           box-sizing: border-box
+//           border: none
+//           border-radius: 4px 4px 0 0
+//           outline: none
+//           border-bottom: 2px solid $white
+//           font: 400 24px Asap, Helvetica, sans-serif
+//           background: none
+//           color: $light-grey
+//           transition: all .3s ease-in-out
+          
+//           &:focus
+//             background-color: rgba(0,0,0,.3)
+
+//     .scroll-link
+//       position: absolute
+//       bottom: 2rem
+//       left: 50%
+//       transform: translateX(-50%)
+
+//       .mouse
+//         max-width: 2.5rem
+//         width: 100%
+//         height: auto
+
+//         .scroll
+//           animation-name: scroll
+//           animation-duration: 1.5s
+//           animation-timing-function: cubic-bezier(0.650, -0.550, 0.250, 1.500)
+//           animation-iteration-count: infinite
+//           transform-origin: 50% 20.5px
+//           will-change: transform
+
+//   main
+//     display: grid
+
+//     .secret-button
+//       justify-self: center
+//       padding: 10px 50px
+//       margin: 10px 0 50px
+//       border: none
+//       outline: none
+//       border-radius: 8px
+//       font: normal 18px Asap
+//       color: $white
+//       background-color: $blue
+//       box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+//       transition: .3s all
+
+//       &:hover
+//         cursor: pointer
+//         transform: translateY(-2px)
+
+//       &:active
+//         cursor: pointer
+//         transform: scale(.9)
+//         filter: brightness(93%)
+
+//     .topics
+//       min-height: 200px
+//       width: 100%
+//       background-color: $white-grey
+
+//     .strip
+//       min-height: 200px
+//       width: 100%
+//       background-color: $white-grey
+//       z-index: 0
+
+//     .row
+//       display: grid
+//       position: relative
+//       grid-template-columns: repeat(2, 1fr)
+//       grid-template-rows: max-content !important
+//       grid-column-gap: 10vw
+//       max-height: 70vh
+//       padding: 50px
+
+//       .text-block
+//         justify-self: center
+//         max-width: 40vw
+//         padding: 15px 25px
+
+//         h3
+//           margin: 0 0 15px
+//           height: max-content
+//           width: 100%
+//           text-transform: uppercase
+//           box-sizing: border-box
+//           font: 600 18px Asap
+
+//         h2
+//           display: block
+//           margin: 0 0 15px
+//           height: max-content
+//           width: 100%
+//           font: 500 48px/ 1.5 Asap
+//           color: $dark-grey
+
+//         p
+//           display: block
+//           margin: 0
+//           height: max-content
+//           width: 100%
+//           font: 400 28px/ 1.5 Asap
+//           color: $grey
+      
+//       .panel
+//         position: absolute
+//         top: -50px
+//         height: 320px
+//         width: 40vw
+//         overflow: hidden
+//         border-radius: 8px
+//         background-color: $white
+//         box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+//         transition: .3s all ease-in-out
+
+//         img
+//           padding-left: -5px
+//           margin-left: -5px
+//           width: 101%
+
+//       .question
+//         display: grid
+//         grid-auto-rows: max-content
+//         grid-row-gap: 15px
+//         align-self: end
+//         width: max-content
+//         margin: 300px 0 0 100px
+
+//         .title
+//           margin: 0
+//           height: max-content
+//           width: 100%
+//           max-width: 25vw
+//           font: 400 18px/ 1.5 Asap
+//           color: $grey
+      
+//         .container
+//           display: grid
+//           align-items: center
+//           position: relative
+      
+//           /* On mouse-over, add a grey background color */
+//           &:hover input ~ .checkmark
+//             background-color: #ccc
+
+//           .reason
+//             margin: 0 0 0 50px
+//             max-width: 25vw
+//             text-align: left
+//             font: normal 18px Asap
+//             color: $light-grey
+
+//           /* Hide the browser's default radio button */
+//           input
+//             position: absolute
+//             opacity: 0
+//             cursor: pointer
+
+//             /* When the radio button is checked, add a blue background */
+//             &:checked ~ .checkmark
+//               background-color: $blue
+//               // background-color: #2196F3
+
+//             /* Show the indicator (dot/circle) when checked */
+//             &:checked ~ .checkmark:after
+//               display: block
+
+//             &:checked + .reason
+//               color: $blue
+
+//           /* Create a custom radio button */
+//           .checkmark
+//             position: absolute
+//             top: 0
+//             left: 0
+//             height: 25px
+//             width: 25px
+//             background-color: #eee
+//             border-radius: 50%
+
+//             /* Create the indicator (the dot/circle - hidden when not checked) */
+//             &:after
+//               content: ""
+//               position: absolute
+//               display: none
+
+//               /* Style the indicator (dot/circle) */
+//               top: 9px
+//               left: 9px
+//               width: 8px
+//               height: 8px
+//               border-radius: 50%
+//               background: white
+
+
+//     .top      
+//       .text-block
+//         grid-column: 1
+
+//         h3
+//           color: $light-teal
+
+//       .panel
+//         grid-column: 2
+//         border-bottom: 5px solid $light-teal
+
+//       .question
+//         grid-column: 2
+    
+//     .middle
+//       .text-block
+//         grid-column: 2
+
+//         h3
+//         color: $dark-blue
+
+//       .panel
+//         grid-column: 1
+//         border-bottom: 5px solid $dark-blue
+
+//       .question
+//         grid-column: 1
+//         margin-top: -90px
+
+//     .bottom
+//       .text-block
+//         grid-column: 1
+
+//         h3
+//           color: $violet
+
+//       .panel
+//         grid-column: 2
+//         border-bottom: 5px solid $violet
+
+//       .question
+//         grid-column: 2
+
+//   footer
+//     display: grid
+//     align-content: center
+//     justify-content: center
+//     min-height: 75px
+//     width: 100%
+//     background-color: $white-grey
+
+//     p
+//       color: $light-grey
+
+
+// @keyframes typing
+//   from
+//     width: 0
+
+// @keyframes blink
+//   from
+//     border-color: transparent
+
+//   to
+//     border-color: $dark-blue
+
+// @keyframes scroll
+//   0%, 20%
+//     transform: translateY(0) scaleY(1)
+  
+//   10%
+//     opacity: 1
+
+//   100%
+//     transform: translateY(36px) scaleY(2)
+//     opacity: .01

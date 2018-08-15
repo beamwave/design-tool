@@ -1,0 +1,23 @@
+.private
+  transition: .3s all ease-in-out
+
+  .sidebar
+    position: fixed
+    height: 100vh
+
+  .expanded
+    width: 20vw
+    opacity: 1
+    background-color: $white-grey
+
+  .expanded + .content
+    margin-left: 20vw
+    width: 80vw
+
+  .collapsed
+    opacity: 0
+    width: 0
+    pointer-events: none
+
+  .collapsed + .content
+    margin-left: 0

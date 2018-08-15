@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render SidebarContent component 1`] = `
+<div
+  className="content"
+>
+  <div
+    className="cover"
+  />
+  <div
+    className="container link-container"
+  >
+    <Link
+      className="link"
+      replace={false}
+      to="/dashboard"
+    >
+      <SvgMenuIcon
+        className="svg menu"
+      />
+      <p
+        className="hint"
+      >
+        Home
+      </p>
+    </Link>
+    <Link
+      className="link"
+      replace={false}
+      to="/create-quiz"
+    >
+      <SvgAddQuizIcon
+        className="svg add-quiz"
+      />
+      <p
+        className="hint"
+      >
+        Create quiz
+      </p>
+    </Link>
+    <Link
+      className="link"
+      replace={false}
+      to="/quizzes/created"
+    >
+      <SvgViewQuizzesIcon
+        className="svg view-quizzes"
+      />
+      <p
+        className="hint"
+      >
+        Quiz history
+      </p>
+    </Link>
+    <Link
+      className="link"
+      replace={false}
+      to="/achievements"
+    >
+      <SvgAchievementsIcon
+        className="svg achievements"
+      />
+      <p
+        className="hint"
+      >
+        Trophies
+      </p>
+    </Link>
+    <Link
+      className="link"
+      replace={false}
+      to="/store"
+    >
+      <SvgCartIcon
+        className="svg store"
+      />
+      <p
+        className="hint"
+      >
+        Store
+      </p>
+    </Link>
+    <Link
+      className="link"
+      replace={false}
+      to="/settings"
+    >
+      <SvgSettingsIcon
+        className="svg settings"
+      />
+      <p
+        className="hint"
+      >
+        Settings
+      </p>
+    </Link>
+  </div>
+</div>
+`;

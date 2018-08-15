@@ -1,0 +1,209 @@
+a
+  text-decoration: none
+  color: $light-grey
+
+  &:hover
+    color: $grey
+
+.nav-header
+  display: flex
+  justify-content: center
+  align-items: center
+  padding: 30px 60px 10px
+
+  .plus
+    position: relative
+    margin-right: 8vw
+    // margin-right: 150px
+    font-size: 24px
+    color: $light-grey
+    transition: .3s all ease-in-out
+
+    &:hover
+      color: $light-teal
+      cursor: pointer
+
+    &:hover .hint
+      opacity: 1
+      pointer-events: all
+
+    .hint
+      @include hint(-55px, -60px, 14px, .5px, Assistant)
+
+      &:after
+        @include hint-after(25px, 60px)
+
+  .settings
+    position: absolute
+    left: 4vw
+    bottom: 35px
+    font-size: 24px
+    color: $light-grey
+    transition: .3s all ease-in-out
+
+    &:hover
+      color: $grey
+      cursor: pointer
+
+    &:hover .hint
+      opacity: 1
+      pointer-events: all
+
+    .hint
+      @include hint(-55px, -40px, 14px, .5px, Assistant)
+
+      &:after
+        @include hint-after(25px, 42px)
+
+  .protocol
+    position: absolute
+    right: 4vw
+    bottom: 35px
+    font-size: 24px
+    color: $light-grey
+    transition: .3s all ease-in-out
+
+    &:hover
+      color: $gold
+      cursor: pointer
+
+    &:hover .hint
+      opacity: 1
+      pointer-events: all
+
+    .hint
+      @include hint(-55px, -25px, 14px, .5px, Assistant)
+
+      &:after
+        @include hint-after(25px, 24px)
+
+  .nav-username
+    margin-right: 5px
+    font: 600 22px Assistant
+    color: $light-grey
+
+    &:hover
+      cursor: pointer
+
+  .fa-angle-down
+    margin-top: 5px
+    font-size: 24px
+    color: $light-grey
+
+    &:hover
+      cursor: pointer
+
+  .image
+    &:hover
+      cursor: pointer
+
+  .profile
+    padding: 0 10px
+    font-size: 20px
+
+  .logout
+    padding: 0 10px
+    margin: 0
+    font-size: 20px
+
+
+.search-group
+  position: relative
+  margin: 0 auto
+  width: max-content
+  z-index: 20
+
+  .icon
+    top: 11px
+    left: 15px
+    position: absolute
+    color: $light-grey
+
+  .input
+    width: 20vw
+    padding: 5px 10px
+    padding-left: 40px
+    margin: 0
+    border-radius: 8px 0 0 8px
+    border: none
+    outline: none
+    font: 600 22px Assistant
+    background-color: $white-grey
+    color: $grey
+
+    &::placeholder
+      color: $grey
+
+  .submit
+    display: grid
+    grid-template-columns: max-content max-content
+
+    .type-choice
+      display: grid
+      position: relative
+
+      .select
+        -webkit-appearance: none
+        -moz-appearance: none
+        appearance: none
+        outline: none
+        width: 140px
+        box-sizing: content-box
+        padding: 5px 15px
+        border: none
+        border-radius: 0 8px 8px 0
+        letter-spacing: .5px
+        font: 600 22px Assistant
+        color: $white
+        background-color: $light-teal
+        transition: .3s all ease-in-out
+
+        &:hover
+          cursor: pointer
+
+      .angle-down
+        position: absolute
+        top: 0
+        right: 0
+        height: 100%
+        width: 40px
+        border-radius: 0 8px 8px 0
+        background-color: hsla(0,0,0,.1)
+
+        &:hover
+          cursor: pointer
+
+        .icon
+          margin: -3px 0 0 -3px
+          pointer-events: none
+          mix-blend-mode: normal !important
+          color: $white
+
+    .search-options
+      display: grid
+      position: absolute
+      grid-template-columns: repeat(2, max-content)
+      justify-content: space-between
+      top: 45px
+      width: 100%
+      padding: 0 15px
+      box-sizing: border-box
+
+      p
+        margin: 0
+        font: 600 18px Assistant
+        color: $light-grey
+        transition: .2s all ease-in-out
+
+        &:hover
+          cursor: pointer
+          color: $light-teal
+
+.navbar-toggle
+  display: inline-block
+  border: none
+  height: 17px
+  width: 22px
+  padding: 0
+  outline: none
+  background-color: transparent

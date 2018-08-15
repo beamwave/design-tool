@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render ProfilePage component 1`] = `
+<div
+  className="profile-page"
+>
+  <div
+    className="main"
+  >
+    <section
+      className="profile-top"
+    >
+      <t
+        className="dropzone"
+        disableClick={false}
+        disablePreview={false}
+        disabled={false}
+        getDataTransferItems={[Function]}
+        inputProps={Object {}}
+        maxSize={Infinity}
+        minSize={0}
+        multiple={true}
+        preventDropOnDocument={true}
+      >
+        <div
+          className="image"
+        >
+          <p
+            className="text"
+          >
+            Image here
+          </p>
+        </div>
+      </t>
+      <div
+        className="bio"
+      >
+        <div
+          className="name-container"
+        >
+          <p
+            className="name"
+          >
+            Tess Eless
+          </p>
+          <FontAwesomeIcon
+            border={false}
+            className="name-edit"
+            fixedWidth={false}
+            flip={null}
+            icon="pencil-alt"
+            inverse={false}
+            listItem={false}
+            mask={null}
+            pull={null}
+            pulse={false}
+            rotation={null}
+            size={null}
+            spin={false}
+            symbol={false}
+            transform={null}
+          />
+        </div>
+        <div
+          className="about-container"
+        >
+          <p
+            className="about"
+          >
+            Javascript developer
+          </p>
+          <FontAwesomeIcon
+            border={false}
+            className="about-edit"
+            fixedWidth={false}
+            flip={null}
+            icon="pencil-alt"
+            inverse={false}
+            listItem={false}
+            mask={null}
+            pull={null}
+            pulse={false}
+            rotation={null}
+            size={null}
+            spin={false}
+            symbol={false}
+            transform={null}
+          />
+        </div>
+      </div>
+    </section>
+    <section
+      className="profile-bottom"
+    >
+      <p
+        className="info"
+      >
+        Profile data
+      </p>
+    </section>
+  </div>
+</div>
+`;

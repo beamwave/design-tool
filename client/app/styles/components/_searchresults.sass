@@ -1,0 +1,104 @@
+
+.search-results-bg
+  position: absolute
+  top: 0
+  left: 0
+  width: 100vw
+  height: 100vh
+  pointer-events: none
+  background-color: rgba(0, 0, 0, 0.5)
+  z-index: 10
+
+.search-results
+  position: absolute
+  top: 90px
+  left: 50%
+  width: 40vw
+  min-width: 500px
+  padding: 25px 0 40px
+  border-radius: 4px
+  transform: translateX(-60%)
+  background-color: white
+  z-index: 20
+
+  @media(max-width: 800px)
+    transform: translateX(-50%)
+
+
+  .container
+    height: max-content
+    min-height: 20px
+    max-height: 300px
+    width: 90%
+    margin: 0 auto
+    overflow-y: scroll
+
+    &::-webkit-scrollbar
+      // size
+      width: 7px
+      // scroll background
+      -webkit-box-shadow: none
+
+    &::-webkit-scrollbar-thumb
+      // bar color
+      background-color: $blue
+      // bar curve
+      border-radius: 25px
+
+    .none-found
+      padding: 15px 25px
+      margin: 0
+      font: 500 22px Asap
+      color: $grey
+
+    .record
+      display: grid
+      grid-template-columns: minmax(max-content, 1fr) minmax(100px, max-content)
+      grid-template-rows: repeat(3, max-content)
+      grid-column-gap: 25px
+      padding: 15px 25px
+
+      &:hover
+        cursor: pointer
+        background-color: lighten(lightgrey, 13%)
+        transition: .4s all
+      
+      .title
+        grid-row: 1
+        justify-self: start
+        margin: 0
+        max-width: 260px
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+        font: 500 22px Asap
+        color: $dark-grey
+
+      .description
+        grid-row: 2
+        justify-self: start
+        margin: -10px 0 0
+        max-width: 22vw
+        font: 500 16px Asap
+        color: $grey
+
+      .author
+        grid-row: 1
+        justify-self: start
+        margin: 15px 0 0
+        font: 300 22px Asap
+        color: $grey
+
+  .header
+    padding-left: 50px
+    margin: 10px 0 10px
+    text-transform: uppercase
+    font: normal 18px Asap
+    color: $grey
+
+
+.focus
+  visibility: visible
+
+.blur
+  visibility: hidden

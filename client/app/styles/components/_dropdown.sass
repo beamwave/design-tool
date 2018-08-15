@@ -1,0 +1,54 @@
+  
+.dropdown-menu
+  display: grid
+  justify-content: center
+  margin: -5px auto 0
+  background-color: $white
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.2))
+  border-radius: 5px
+  z-index: 100
+
+.dropdown-toggle
+  display: flex
+  align-items: center
+  background: none
+  border: none
+  outline: none
+
+  > .image
+    height: 50px
+    width: 50px
+    margin: 0 10px
+    border-radius: 50%
+
+.dropdown-item
+  display: grid
+  width: 100%
+  padding: 20px
+  text-align: left
+  outline: none
+  border: none
+  background: none
+  white-space: nowrap
+  letter-spacing: .5px
+  font: 600 18px Assistant
+  color: $light-grey
+  transition: all .2s
+  
+  &:hover
+    cursor: pointer
+    border-radius: 5px
+    color: $grey
+    background: $lightgrey
+
+  &:hover a
+    color: $grey
+
+// dropdowns for app (conver one above to header)
+.app-dropdown-root
+
+  .dropdown-item
+    padding: 15px 25px
+    letter-spacing: .5px
+    font: 600 18px Assistant
+    color: $grey

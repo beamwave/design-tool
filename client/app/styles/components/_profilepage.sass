@@ -1,0 +1,107 @@
+.profile-page
+  .main
+    display: grid
+    margin: auto
+    width: 75%
+    min-width: 500px
+    max-width: 600px
+    border-radius: 8px
+    background-color: $white
+    box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+
+    .profile-top
+      display: grid
+      grid-template-columns: 1fr 2fr
+      grid-column-gap: 25px
+      align-items: center
+      height: max-content
+      padding: 30px 50px
+      margin: 0
+      border-radius: 8px 8px 0 0
+      background: linear-gradient(40deg, $teal, $midnight)
+
+      .dropzone
+        display: grid
+        align-items: center
+        justify-items: center
+        margin: 0
+        height: 150px
+        width: 150px
+        border-radius: 50%
+        background-color: lighten($teal, 10%)
+
+        .image
+          display: grid
+          align-items: center
+          justify-items: center
+          margin: 0
+          height: 130px
+          width: 130px
+          border-radius: 50%
+          background-color: $grey          
+
+          .text
+            margin: 0
+            color: $light-grey
+
+      .bio
+        .name-container
+          display: grid
+          grid-template-columns: repeat(2, max-content)
+          grid-column-gap: 15px
+          align-items: center
+
+          &:hover .name-edit
+            opacity: 1
+
+          .name
+            margin: 10px 0
+            padding: 0
+            width: max-width
+            font: normal 36px Asap
+            color: $white
+
+          .name-edit
+            opacity: 0
+            color: $light-grey
+            transition: .15s all ease-in-out
+
+            &:hover
+              cursor: pointer
+
+        .about-container
+          display: grid
+          grid-template-columns: repeat(2, max-content)
+          grid-column-gap: 15px
+          align-items: center
+
+          &:hover .about-edit
+            opacity: 1
+
+          .about
+            margin: 0
+            padding: 0
+            width: max-width
+            font: normal 21px Asap
+            color: $light-grey
+
+          .about-edit
+            transition: .15s all ease-in-out
+            opacity: 0
+            color: $light-grey
+
+            &:hover
+              cursor: pointer
+
+    .profile-bottom
+      display: grid
+      align-items: start
+      margin: 0
+      padding: 0 50px
+      height: 200px
+      
+      .info
+        font: normal 21px Asap
+        color: $light-grey
+
+

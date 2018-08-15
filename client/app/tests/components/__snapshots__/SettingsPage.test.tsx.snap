@@ -1,0 +1,122 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render SettingsPage component 1`] = `
+<div
+  className="settings-page"
+>
+  <div
+    className="main"
+  >
+    <aside>
+      <p
+        className="active"
+        onClick={[Function]}
+      >
+        General
+      </p>
+      <p
+        className={null}
+        onClick={[Function]}
+      >
+        Password
+      </p>
+      <p
+        className={null}
+        onClick={[Function]}
+      >
+        Themes
+      </p>
+    </aside>
+    <main>
+      <div
+        className="input-group"
+      >
+        <label
+          htmlFor="photo"
+        >
+          Photo
+        </label>
+        <div
+          className="photo-container"
+          onClick={[Function]}
+        >
+          <t
+            className="dropzone"
+            disableClick={false}
+            disablePreview={false}
+            disabled={false}
+            getDataTransferItems={[Function]}
+            inputProps={Object {}}
+            maxSize={Infinity}
+            minSize={0}
+            multiple={true}
+            onDrop={[Function]}
+            preventDropOnDocument={true}
+          />
+        </div>
+        <input
+          className="file-upload"
+          data-cloudinary-field="image_id"
+          name="file"
+          onChange={[Function]}
+          style={
+            Object {
+              "display": "none",
+            }
+          }
+          type="file"
+        />
+      </div>
+      <form
+        className="settings-form"
+        onChange={[Function]}
+        onSubmit={[Function]}
+      >
+        <div
+          className="input-group"
+        >
+          <label
+            htmlFor="fullname"
+          >
+            Full Name
+          </label>
+          <input
+            name="fullname"
+            onChange={[Function]}
+            placeholder="Marty"
+            type="text"
+            value="Marty"
+          />
+        </div>
+        <div
+          className="input-group"
+        >
+          <label
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            name="email"
+            onChange={[Function]}
+            placeholder="marty@slackjaw.com"
+            type="email"
+            value="marty@slackjaw.com"
+          />
+        </div>
+        <div
+          className="input-group"
+        >
+          <button
+            className="save-button"
+            onSubmit={[Function]}
+            type="submit"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+`;

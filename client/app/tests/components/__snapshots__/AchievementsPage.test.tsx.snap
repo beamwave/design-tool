@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render AchievementsPage component 1`] = `
+<div
+  className="achievements-page"
+>
+  <div
+    className="main"
+  >
+    <header>
+      <h1
+        className="title"
+      >
+        Achievements
+      </h1>
+    </header>
+    <main>
+      <p
+        className="placeholder-text"
+      >
+        List all achievements here.
+      </p>
+    </main>
+  </div>
+</div>
+`;

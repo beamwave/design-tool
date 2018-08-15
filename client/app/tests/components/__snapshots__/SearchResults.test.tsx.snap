@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render SearchResults component 1`] = `
+<div
+  className="section focus"
+>
+  <div
+    className="search-results-bg"
+  />
+  <div
+    className="search-results"
+  >
+    <p
+      className="header"
+    >
+      Results
+    </p>
+    <div
+      className="container"
+    />
+  </div>
+</div>
+`;

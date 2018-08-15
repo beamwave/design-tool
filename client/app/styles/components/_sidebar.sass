@@ -1,0 +1,200 @@
+
+
+
+.sidebar-content
+  padding: 100px 0 0
+
+  .trash
+    position: absolute
+    top: 25px
+    right: 25px
+    font-size: 21px
+    color: $light-grey
+
+    &:hover
+      cursor: pointer
+      color: $red
+
+  .categories
+    display: grid
+
+    .category
+      display: grid
+      grid-template-columns: 1fr max-content
+      grid-column-gap: 15px
+      align-items: center
+      padding: 15px 35px
+
+      transition: .3s all ease-in-out
+
+      &:hover
+        cursor: pointer
+        background-color: lighten($light-grey, 15%)
+        color: $grey
+
+      p
+        margin: 0
+        color: $light-grey
+        font: 700 21px Assistant, Helvetica, sans-serif
+
+      .angle-right
+        font-size: 21px
+        color: $light-grey
+
+
+
+// .overlay-class
+//   border: 3px solid blue
+
+// .content-class
+//   position: absolute !important
+//   top: 0
+//   left: 0
+//   right: 0
+//   bottom: 0
+//   overflow-x: hidden !important
+//   overflow-y: scroll !important
+  
+//   // parent of dashboard div
+//   > div
+//     height: 98vh
+//     border: 0.0001 solid blue
+
+// .sidebar
+//   height: 100%
+//   background-color: $white
+//   filter: drop-shadow(5px 0 15px rgba(0, 0, 0, .2)) !important
+//   // border: 1px solid red
+
+// .cover
+//   position: absolute
+// //   top: 0
+// //   bottom: 0
+// //   width: 100%
+// //   z-index: 100
+// //   pointer-events: none
+// //   background-color: black
+// //   opacity: .3
+
+// .content > .container
+//   display: grid
+//   align-items: center
+//   height: 100%
+//   box-sizing: border-box
+
+//   .link
+//     display: grid
+//     position: relative
+//     align-items: center
+//     margin: 20px 10px
+//     transition: all .5s
+
+//     &:focus
+//       outline: none
+
+//     .svg
+//       justify-self: center
+//       // filter: drop-shadow(0 0 3px rgba(255,255,255,0.2))
+//       transform: scale(.6)
+
+//       &:hover
+//         animation: svg .2s forwards
+
+//       &:hover + .hint
+//         opacity: 1
+
+//     .hint
+//       position: absolute
+//       top: 27px
+//       left: -10px
+//       width: 150%
+//       opacity: 0
+//       text-align: center
+//       font: 400 12px Asap
+//       color: $light-grey
+//       transition: .3s all ease-in-out
+
+//     .menu > *
+//       grid-row: 1
+//       stroke: $blue
+
+//     .menu + .hint
+//       top: 20px
+
+//     .add-quiz > *
+//       stroke: $violet
+
+//     .add-quiz + .hint
+//       top: 20px
+
+//     .view-quizzes > *
+//       stroke: $violet
+
+//     .achievements > *
+//       stroke: $violet
+
+//     .store > *
+//       fill: $violet
+
+//     .settings
+//       > *
+//         stroke: $light-grey
+//       path
+//         fill: $light-grey
+
+//   .scroll-container
+//     display: grid
+//     justify-items: center
+//     box-sizing: border-box
+//     margin: 25px 9px 5px
+//     padding: 0 0 0 10px
+//     width: 40px
+//     overflow: hidden
+
+//     .questions
+//       display: grid
+//       grid-auto-rows: max-content
+//       align-items: center
+//       justify-items: center
+//       height: 490px
+//       width: 31px
+//       margin-right: -50px
+//       padding-right: 50px 
+//       transition: all .5s
+//       overflow-y: scroll
+//       // border: 1px solid red
+
+//       .question-number
+//         margin-top: 15px
+//         margin-bottom: 15px
+//         font: 600 21px Asap
+//         color: $violet
+//         // border: 1px solid blue
+        
+//         &:hover
+//           cursor: pointer
+
+//   .scroll-down
+//     display: grid
+//     align-self: end
+//     justify-items: center
+//     margin: 20px 10px
+//     color: $light-grey
+
+//     .icon
+//       font-size: 24px
+
+// .content > .question-container
+//   align-items: space-between
+//   padding-top: 20px
+
+// .content > .link-container
+//   grid-template-rows: repeat(6, 80px)
+//   padding-top: 10px
+
+
+// @keyframes svg
+//   0%, 10% 
+//     filter: brightness(100%)
+//   100% 
+//     filter: brightness(70%)

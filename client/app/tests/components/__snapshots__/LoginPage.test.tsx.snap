@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render LoginPage component 1`] = `
+<div
+  className="login-page"
+>
+  <div
+    className="login-bg"
+  />
+  <Link
+    className="header"
+    replace={false}
+    to="/"
+  >
+    <div
+      className="globe"
+    >
+      <FontAwesomeIcon
+        border={false}
+        className=""
+        fixedWidth={false}
+        flip={null}
+        icon="globe"
+        inverse={false}
+        listItem={false}
+        mask={null}
+        pull={null}
+        pulse={false}
+        rotation={null}
+        size={null}
+        spin={false}
+        symbol={false}
+        transform={null}
+      />
+    </div>
+    <h1
+      className="app-name"
+    >
+      Arsenal
+    </h1>
+  </Link>
+  <form
+    className="login-form"
+    onChange={[Function]}
+    onSubmit={[Function]}
+  >
+    <div
+      className="input-group"
+    >
+      <label
+        className="title"
+      >
+        username
+      </label>
+      <input
+        name="username"
+        style={
+          Object {
+            "border": "none",
+          }
+        }
+        type="text"
+      />
+    </div>
+    <div
+      className="input-group"
+    >
+      <label
+        className="title"
+      >
+        password
+      </label>
+      <input
+        name="password"
+        style={
+          Object {
+            "border": "none",
+          }
+        }
+        type="password"
+      />
+    </div>
+    <div
+      className="input-group"
+    >
+      <div
+        className="switch-page"
+      >
+        <p
+          className="text"
+        >
+          Don't have an account?
+        </p>
+        <Link
+          className="signup-link"
+          replace={false}
+          to="/signup"
+        >
+           Signup
+        </Link>
+      </div>
+      <button
+        className="login-button button"
+        type="submit"
+      >
+        Login
+      </button>
+    </div>
+  </form>
+  <div
+    className="overlay"
+  />
+  <div
+    className="bg"
+  />
+</div>
+`;

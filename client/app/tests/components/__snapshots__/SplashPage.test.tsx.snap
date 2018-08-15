@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render SplashPage component 1`] = `
+<div
+  className="splash-page"
+>
+  <header>
+    <nav
+      className="splash-nav"
+    >
+      <Link
+        className="item"
+        replace={false}
+        to="/"
+      >
+        Arsenal
+      </Link>
+      <Link
+        className="item"
+        replace={false}
+        to="/login"
+      >
+        Login
+      </Link>
+      <p>
+        or
+      </p>
+      <Link
+        className="item"
+        replace={false}
+        to="/signup"
+      >
+        Signup
+      </Link>
+    </nav>
+  </header>
+  <main>
+    <p>
+      splash page
+    </p>
+  </main>
+</div>
+`;

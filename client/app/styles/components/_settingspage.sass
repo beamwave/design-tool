@@ -1,0 +1,119 @@
+
+
+.settings-page
+  .main
+    display: grid
+    grid-template-columns: 1fr 3fr
+    grid-column-gap: 50px
+    position: relative
+    margin: 35px auto
+    height: 72vh
+    width: 75%
+    min-width: 500px
+    max-width: 800px
+    border-radius: 8px
+    background-color: $white
+    box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+    overflow-y: hidden
+
+    aside
+      padding: 0 35px
+      background: linear-gradient(40deg, $teal, $midnight)
+      border-radius: 8px 0 0 8px
+      height: 100%
+
+      p
+        margin: 30px 0
+        width: max-content
+        letter-spacing: .7px
+        text-transform: uppercase
+        font: normal 18px Asap
+        color: $white
+
+        &:hover
+          cursor: pointer
+
+      .active
+        letter-spacing: .7px
+        font-weight: 600
+
+    main
+      padding: 25px 50px 50px 0
+
+      .settings-form
+        display: grid
+        
+        .input-group
+          display: grid
+          position: relative
+          align-items: center
+          grid-column-gap: 10px
+
+          .photo-container
+            position: relative
+            width: max-content
+            transition: .3s all
+            &:hover
+              cursor: pointer
+              filter: brightness(80%)
+
+            .photo
+              height: 50px
+              width: 50px
+              border-radius: 50%
+              text-align: center
+              filter: brightness(50%)
+
+            .dropzone
+              height: 100px
+              width: 100px
+              margin: 0
+              border-radius: 50%
+              background-color: $white-grey
+
+          label
+            padding: 10px 0
+            text-transform: uppercase
+            font: normal 18px Asap
+            color: $grey
+
+            &:first-of-type
+              margin-top: 15px
+
+          input
+            padding: 10px 15px
+            border: none
+            outline: none
+            border-radius: 8px
+            font: normal 18px Asap
+            color: $grey
+            background-color: $white-grey
+
+            &::placeholder
+              font: normal 18px Asap
+              color: $grey
+
+          .save-button
+            justify-self: end
+            grid-column: 2
+            margin: 35px 0 0
+            padding: 10px 35px
+            border: none
+            outline: none
+            border-radius: 8px
+            font: normal 18px Asap
+            color: $white
+            background-color: $light-teal
+            box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+            transition: .3s all
+
+            &:hover
+              cursor: pointer
+              transform: translateY(-2px)
+
+            &:active
+              cursor: pointer
+              transform: scale(.9)
+              filter: brightness(93%)
+
+

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render Modal component 1`] = `
+<div>
+  <div
+    className="modal-overlay-div"
+  />
+  <div
+    className="modal-content-div"
+    onClick={[Function]}
+  >
+    <div
+      className="modal-dialog-div"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;

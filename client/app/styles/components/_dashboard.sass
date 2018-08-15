@@ -1,0 +1,174 @@
+
+.dashboard-page
+  display: grid
+  grid-template-columns: 1fr
+  grid-column-gap: 15px
+  height: 65vh
+  width: 60vw
+  margin: 25px auto 0
+  box-sizing: border-box
+  overflow-x: hidden
+  overflow-y: scroll
+
+  &::-webkit-scrollbar
+    // size
+    width: 7px
+    // scroll background
+    -webkit-box-shadow: none
+
+  &::-webkit-scrollbar-thumb
+    // bar color
+    background-color: $light-teal
+    opacity: .5
+    // bar curve
+    border-radius: 25px
+
+  .image-results
+
+  .primary-config
+    position: absolute
+    right: 4vw
+    top: 175px
+
+    main
+      display: grid
+      grid-row-gap: 35px
+
+      .filter-container
+        display: grid
+        position: relative
+        grid-template-rows: repeat(2, max-content)
+        // border: 1px solid violet
+      
+        label
+          margin: 0 0 10px
+          letter-spacing: .5px
+          font: 600 18px Assistant
+          color: $light-grey
+
+        .select
+          -webkit-appearance: none
+          -moz-appearance: none
+          appearance: none
+          outline: none
+          width: 140px
+          box-sizing: content-box
+          padding: 5px 15px
+          border: none
+          border-radius: 8px
+          letter-spacing: .5px
+          font: 600 18px Assistant
+          color: $light-grey
+          background-color: $white-grey
+          transition: .3s all ease-in-out
+
+          &:hover
+            cursor: pointer
+
+        .angle-down
+          display: grid
+          position: absolute
+          align-items: center
+          justify-items: center
+          right: 0
+          bottom: 0
+          height: 33px
+          width: 40px
+          border-radius: 0 8px 8px 0
+          background-color: hsla(0,0,0,.1)
+
+          &:hover
+            cursor: pointer
+
+          .icon
+            margin: 1px 0 0 -1px
+            pointer-events: none
+            mix-blend-mode: normal !important
+            font-size: 22px
+            color: $light-grey
+
+  .secondary-config
+    position: absolute
+    bottom: 35px
+    width: 61vw
+    margin: 0 auto
+    box-sizing: border-box
+
+    main
+      display: grid
+      grid-template-columns: max-content 1fr max-content
+      justify-items: space-between
+      margin-left: -1px
+
+      .filter-group
+        display: grid
+        position: relative
+        grid-auto-flow: column
+        grid-column-gap: 15px
+        align-items: center
+
+        &:last-of-type
+          grid-column: 3
+
+        .input-group
+          display: grid
+          grid-template-columns: repeat(2, max-content)
+          grid-column-gap: 5px
+          align-items: center
+
+          label
+            @include bottom-label
+
+          input
+            @include bottom-input
+
+          .input
+            @include bottom-input
+            width: 125px
+
+          .names
+            @include bottom-input
+            width: 175px
+
+          .male-icon, .female-icon
+            margin: 0 5px
+            font-size: 36px
+            color: $light-grey
+            transition: .3s all ease-in-out
+
+            &:hover
+              cursor: pointer
+              color: $grey
+
+          .color-group
+            display: grid
+            position: absolute
+            right: -20px
+            
+            .icon
+              color: $light-grey
+
+      .gender
+        padding: 0 15px
+        .input-group
+          label
+            margin-right: 15px
+
+  // .image-results
+  //   display: flex
+  //   flex-wrap: wrap
+  //   // display: grid
+  //   // grid-column: 1
+  //   background-color: $light-teal
+
+  //   &::after
+  //     content: ''
+  //     flex-grow: 999999999
+
+  //   .image-container
+  //     img
+  //       display: block
+  //       position: absolute
+  //       top: 0
+  //       width: 100%
+  //       vertical-align: bottom

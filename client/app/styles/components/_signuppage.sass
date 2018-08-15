@@ -1,0 +1,134 @@
+
+.signup-page
+  display: grid
+  align-content: center
+  justify-content: center
+  height: 100vh
+
+  .signup-bg
+    position: absolute
+    height: 100vh
+    background-color: red
+    background-size: cover
+    background-position: 6%
+    opacity: 1
+    z-index: -1
+
+  .header
+    display: grid
+    grid-template-columns: repeat(2, max-content)
+    grid-column-gap: 15px
+    margin: 0 auto
+    align-items: center
+    width: max-content
+
+    .app-name
+      margin: 0
+      text-align: center
+      letter-spacing: .5px
+      font: 700 42px Assistant, Helvetica, sans-serif
+      color: $sidebar-black
+      // color: $dark-blue
+
+    .globe
+      font-size: 24px
+      color: $orange
+      transition: .3s all
+
+      &:hover
+        filter: brightness(95%)
+
+  .signup-form
+    display: grid
+    grid-template-columns: 1fr
+    width: 35vw
+    min-width: 450px
+    max-width: 600px
+    padding: 0 55px 40px
+    border-radius: 3px
+    background-color: rgba(255, 255, 255, 1)
+  
+    .input-group
+      display: grid
+      position: relative
+      align-items: center
+      grid-column-gap: 10px
+
+      label
+        padding: 10px 0
+        text-transform: uppercase
+        letter-spacing: 1px
+        font: 600 21px Assistant
+        color: $light-grey
+
+        &:first-of-type
+          margin-top: 15px
+
+      input
+        padding: 10px 15px
+        border: none
+        border-radius: 8px
+        outline: none
+        letter-spacing: 1px
+        font: normal 18px Assistant
+        color: $grey
+        background-color: $white-grey
+
+        &::placeholder
+          font: normal 18px Assistant
+          color: $grey
+
+    .button
+      justify-self: end
+      grid-column: 2
+      margin: 35px 0 0
+      padding: 10px 50px
+      border: none
+      outline: none
+      border-radius: 8px
+      letter-spacing: .5px
+      font: 600 18px Assistant
+      color: $white
+      background: linear-gradient(40deg, $red, $orange)
+      // background-color: $blue
+      box-shadow: 0 10px 24px rgba(0,0,0,.15), 0 3px 10px rgba(0,0,0,.1)
+      transition: .3s all
+
+      &:hover
+        cursor: pointer
+        transform: translateY(-2px)
+        filter: brightness(95%)
+
+      &:active
+        cursor: pointer
+        transform: scale(.9)
+        filter: brightness(93%)
+
+    .global-errors
+      padding: 5px 0
+      margin: 0
+      text-align: center
+      font-size: 21px
+      font-weight: 700
+      color: $error-red
+      border-left: 4px solid $error-red
+      background-color: $error-red-bg
+        
+    .inline-errors
+      margin: 5px 0 0
+      color: $error-red
+      font-size: 18px
+
+    .switch-page
+      display: flex
+      align-self: end
+      align-items: center
+      font: normal 18px Assistant
+      color: darken($light-grey, 5%)
+
+      p
+        margin: 0
+
+      .login-link
+        margin: 0
+        color: $red

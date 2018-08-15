@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render QuizResultsPage component 1`] = `
+<div
+  className="quiz-results-page"
+>
+  <div
+    className="quiz-results-page"
+  >
+    <div
+      className="main"
+    >
+      <main>
+        <h1
+          className="title"
+        />
+        <p
+          className="score"
+        >
+          NaN
+          %
+        </p>
+        <div
+          className="points-container"
+        >
+          <p
+            className="points"
+          >
+            +
+            NaN
+             
+          </p>
+          <SvgCoinIcon
+            className="coin-icon"
+          />
+        </div>
+      </main>
+      <footer>
+        <Link
+          className="link"
+          replace={false}
+          to="/view-quiz/undefined"
+        >
+          <p
+            className="retake-button"
+          >
+            Retake quiz
+          </p>
+        </Link>
+        <Link
+          className="link"
+          replace={false}
+          to="/review-quiz/undefined"
+        >
+          <p
+            className="results-button"
+          >
+            Review Quiz
+          </p>
+        </Link>
+      </footer>
+    </div>
+  </div>
+</div>
+`;

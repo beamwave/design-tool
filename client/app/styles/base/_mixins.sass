@@ -1,0 +1,75 @@
+@mixin hint($top, $right, $size: 16px, $spacing: 0, $font: helvetica, 
+$color: $white, $bg: $grey)
+  position: absolute
+  top: $top
+  right: $right
+  width: max-content
+  padding: 5px 15px
+  border-radius: 8px
+  opacity: 0
+  letter-spacing: $spacing
+  pointer-events: none
+  font: 500 $size $font
+  color: $color
+  background-color: $bg
+  transition: .3s all ease-in-out
+
+@mixin hint-after($top, $right)
+  content: ''
+  position: absolute
+  top: $top
+  right: $right
+  width: 0
+  height: 0
+  border-left: 10px solid transparent
+  border-right: 10px solid transparent
+  border-top: 10px solid $grey
+
+@mixin bottom-label
+  margin-right: 10px
+  letter-spacing: .5px
+  font: 600 18px Assistant
+  color: $light-grey
+
+@mixin bottom-input
+  outline: none
+  width: 100px
+  box-sizing: content-box
+  padding: 5px 15px
+  border: none
+  border-radius: 8px
+  letter-spacing: .5px
+  font: 600 18px Assistant
+  color: $light-grey
+  background-color: $white-grey
+  transition: .3s all ease-in-out
+
+
+
+
+
+        // &:hover .hint
+        //   opacity: 1
+
+        // .hint
+        //   position: absolute
+        //   top: -55px
+        //   right: -50px
+        //   width: max-content
+        //   padding: 5px 15px
+        //   border-radius: 8px
+        //   opacity: 0
+        //   color: $white
+        //   background-color: $grey
+        //   transition: .3s all ease-in-out
+
+        //   &:after
+        //     content: ''
+        //     position: absolute
+        //     right: 47px
+        //     top: 25px
+        //     width: 0
+        //     height: 0
+        //     border-left: 10px solid transparent
+        //     border-right: 10px solid transparent
+        //     border-top: 10px solid $grey
