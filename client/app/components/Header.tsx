@@ -187,7 +187,8 @@ export class Header extends Component<Props> {
             <div
               className="image"
               style={{
-                background: `url(${photo}) center / cover no-repeat`,
+                // url bg-pos: x% y% / bg-scale: %
+                background: `url(${photo}) 50% 5% / 110% no-repeat`,
                 marginRight: 15
               }}
             />

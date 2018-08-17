@@ -6,6 +6,7 @@ import { appReducer } from '../reducers/app'
 import { authReducer } from '../reducers/auth'
 import { modalReducer } from '../reducers/modal'
 import { imageReducer } from '../reducers/images'
+import { filterReducer } from '../reducers/filter'
 
 // middleware is called every store update
 const checkTokenExpirationMiddleware = store => next => action => {
@@ -29,7 +30,8 @@ export const configureStore = () => {
       app: appReducer,
       auth: authReducer,
       modal: modalReducer,
-      images: imageReducer
+      images: imageReducer,
+      filters: filterReducer
     }),
     composeEnhancers(applyMiddleware(thunk, checkTokenExpirationMiddleware))
   )

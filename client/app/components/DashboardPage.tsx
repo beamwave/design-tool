@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import moment from 'moment'
-import numeral from 'numeral'
 import ReactGridGallery from 'react-grid-gallery'
-import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome'
 import { check } from '../helpers/helpers'
+import { filter } from '../actions/filter'
+
+interface FData {
+  category: string
+  value: string
+}
 
 interface IProps {
   username: string
   category: string
   categories?: any
   images: any[]
+  filters?: any[]
+  filter?: (by: FData) => any
 }
 
 interface IState {
@@ -24,8 +29,17 @@ export class DashboardPage extends Component<IProps, IState> {
     categories: 'map an object'
   }
 
-  // populate
-  handleCategoryChange = e => {}
+  // filter images
+  handleFilterChange = ({ target }) => {
+    const { filters, filter } = this.props
+    // "medium", "device", "wardrobe", "mood", etc.
+    // console.log('dataset', target.dataset.filterName)
+    // console.log('value', target.value)
+
+    const by = { category: target.dataset.filterName, value: target.value }
+
+    filter(by)
+  }
 
   componentDidMount = () => {
     const { images: imagesFromServer } = this.props
@@ -42,7 +56,12 @@ export class DashboardPage extends Component<IProps, IState> {
   }
 
   render = () => {
-    const { category, categories, images: imagesFromServer } = this.props
+    const {
+      category,
+      categories,
+      images: imagesFromServer,
+      filters
+    } = this.props
     const { images } = this.state
     const alive = check(imagesFromServer)
     return (
@@ -73,12 +92,13 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['medium']}
+                      data-filter-name="medium"
+                      onChange={this.handleFilterChange}
                     >
                       {categories.hasOwnProperty('medium') ? (
                         categories['medium'].map(option => (
-                          <option value={option.id}>{option.name}</option>
+                          <option value={option.name}>{option.name}</option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -93,12 +113,13 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['device']}
+                      data-filter-name="device"
+                      onChange={this.handleFilterChange}
                     >
                       {categories.hasOwnProperty('device') ? (
                         categories['medium'].map(option => (
-                          <option value={option.id}>{option.name}</option>
+                          <option value={option.name}>{option.name}</option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -113,12 +134,13 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['project']}
+                      data-filter-name="project"
+                      onChange={this.handleFilterChange}
                     >
                       {categories.hasOwnProperty('device') ? (
                         categories['medium'].map(option => (
-                          <option value={option.id}>{option.name}</option>
+                          <option value={option.name}>{option.name}</option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -137,8 +159,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['topic']}
+                      data-filter-name="topic"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -154,8 +177,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      // onChange={this.handleCategoryChange}
+                      value={filters['style']}
+                      data-filter-name="style"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -171,8 +195,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['site']}
+                      data-filter-name="site"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -192,8 +217,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['wardrobe']}
+                      data-filter-name="wardrobe"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -209,8 +235,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['attire']}
+                      data-filter-name="attire"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -230,8 +257,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['mood']}
+                      data-filter-name="mood"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -247,8 +275,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['group']}
+                      data-filter-name="group"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -264,8 +293,9 @@ export class DashboardPage extends Component<IProps, IState> {
                     <select
                       name="select"
                       className="select"
-                      value={category}
-                      onChange={this.handleCategoryChange}
+                      value={filters['angle']}
+                      data-filter-name="angle"
+                      onChange={this.handleFilterChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -380,7 +410,11 @@ const mapStateToProps = state => ({
   username: state.auth.username,
   category: state.app.category,
   categories: state.images.categories,
-  images: state.images.all
+  images: state.images.all,
+  filters: state.filters
 })
 
-export default connect(mapStateToProps)(DashboardPage)
+export default connect<any>(
+  mapStateToProps,
+  { filter }
+)(DashboardPage)
