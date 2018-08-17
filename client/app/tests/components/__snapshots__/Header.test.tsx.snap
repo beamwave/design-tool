@@ -147,7 +147,6 @@ exports[`should render Header component 1`] = `
           />
         </div>
         <select
-          className="select"
           onChange={[Function]}
         >
           <option

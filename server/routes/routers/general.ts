@@ -54,6 +54,7 @@ module.exports = app => {
   })
 
   app.get('/get_images', verifyToken, async (req, res) => {
+    // where req.params is stored from axios
     const { id } = req.query
     // get images with id references
     let query = await Image.find({ owner: id }).lean()
@@ -102,37 +103,32 @@ module.exports = app => {
               if (reqDoc === realDoc) doc = schemas[realDoc]
             }
 
-            // query based on doc variable (ie Artist, Medium,or Type)
+            // query based on doc variable (ie Artist, Medium, or Type)
             const result = await doc.findById(prop[1]).lean()
 
             // will replace id references in image object
             // { "medium": "web", "_id": "zi1pu5a2izm3ij234z"}
-            const identifiers = {
+            const identifier = {
               name: result.name,
               id: result._id
             }
 
-            // add choice to categories list
+            // adds object with categories
+            // each category contains each unique type and id (ie medium: {web, photo})
             if (categories.hasOwnProperty(prop[0])) {
-              console.log(
-                'checking if ',
-                prop[1],
-                'exists in ',
-                categories[prop[0]]
+              const existence = categories[prop[0]].some(
+                stack =>
+                  stack.name === identifier.name || stack.id === identifier.id
               )
-              console.log('verdict', categories[prop[0]].includes(prop[1]))
-              if (!categories[prop[0]].includes(prop[0])) {
-                categories[prop[0]] = [...categories[prop[0]], result._id]
-              }
+              if (!existence)
+                categories[prop[0]] = [...categories[prop[0]], identifier]
             }
-
-            // add property to categories list if it doesnt exist already
             if (!categories.hasOwnProperty(prop[0])) {
-              categories[prop[0]] = [result._id]
+              categories[prop[0]] = [identifier]
             }
 
             const final = {}
-            final[prop[0]] = identifiers
+            final[prop[0]] = identifier
 
             propertyOverwrites.push(final)
           })
@@ -160,7 +156,7 @@ module.exports = app => {
     )
 
     // here goes nothing
-    console.log('categories', categories)
+    console.log('categories: ', categories)
 
     // send images to client
     res.status(200).json({ images, categories })

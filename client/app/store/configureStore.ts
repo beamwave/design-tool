@@ -7,10 +7,6 @@ import { authReducer } from '../reducers/auth'
 import { modalReducer } from '../reducers/modal'
 import { imageReducer } from '../reducers/images'
 
-import { quizzesReducer } from '../reducers/quizzes'
-import { createReducer } from '../reducers/create.reducer'
-import { takeQuizReducer } from '../reducers/takeQuiz'
-
 // middleware is called every store update
 const checkTokenExpirationMiddleware = store => next => action => {
   // if (localStorage.q) {
@@ -33,11 +29,7 @@ export const configureStore = () => {
       app: appReducer,
       auth: authReducer,
       modal: modalReducer,
-      images: imageReducer,
-
-      quizzes: quizzesReducer,
-      takeQuiz: takeQuizReducer,
-      create: createReducer
+      images: imageReducer
     }),
     composeEnhancers(applyMiddleware(thunk, checkTokenExpirationMiddleware))
   )

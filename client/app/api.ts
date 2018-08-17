@@ -6,29 +6,14 @@ export default {
     login: credentials =>
       axios.post('/login', { credentials }).then(res => res.data.user),
 
-    signup: user => axios.post('/signup', { user }).then(res => res.data.user)
+    signup: user => axios.post('/signup', { user }).then(res => res.data.user),
 
-    // confirm: token =>
-    //   fetch('/verification', JSON.stringify({ token })).then(
-    //     res => res.data.user
-    //   )
-
-    //   updateGeneral: file =>
-    //     axios
-    //       .post('/general_settings', file, { headers: getToken() })
-    //       .then(res => res.data),
-
-    //   updatePassword: file =>
-    //     axios
-    //       .post('/password_settings', file, { headers: getToken() })
-    //       .then(res => res.data)
+    refresh: user => axios.post('/refresh', { user }).then(res => res.data.user)
   },
 
   image: {
     getAll: id =>
-      axiosGuard
-        .get('/get_images', { params: { id } })
-        .then(res => res.data.images),
+      axiosGuard.get('/get_images', { params: { id } }).then(res => res.data),
 
     upload: image =>
       axiosGuard.post('/create_image', image).then(res => res.data.images)

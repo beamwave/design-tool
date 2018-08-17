@@ -1,5 +1,5 @@
 import React from 'react'
-import api from '../path-list'
+import api from '../api'
 
 export const sidebar = bool => dispatch =>
   dispatch({
@@ -22,8 +22,9 @@ export const searching = () => dispatch =>
   })
 
 export const startSearch = query => async dispatch => {
-  const quizzesByAuthors = await api.quizzes.searchByAuthor(query)
-  const quizzesByTags = await api.quizzes.searchByTag(query)
+  // const quizzesByAuthors = await api.quizzes.searchByAuthor(query)
+  // const quizzesByTags = await api.quizzes.searchByTag(query)
+  let quizzesByAuthors, quizzesByTags
 
   const quizResults = {
     ...quizzesByAuthors,

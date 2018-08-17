@@ -95,6 +95,13 @@ export class Header extends Component<Props> {
     // await startSearch(query)
   }
 
+  handleSelectColor = category => {
+    if (category === 'art') return 'select teal'
+    if (category === 'comments') return 'select violet'
+    if (category === 'clothes') return 'select blue'
+    if (category === 'people') return 'select grey'
+  }
+
   handleSubmit = e => {
     e.preventDefault()
     this.setState({
@@ -153,7 +160,7 @@ export class Header extends Component<Props> {
                 <FontAwesomeIcon icon="angle-down" className="icon" />
               </div>
               <select
-                className="select"
+                className={this.handleSelectColor(category)}
                 value={category}
                 onChange={this.handleCategoryChange}
               >

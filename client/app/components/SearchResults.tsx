@@ -1,24 +1,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import api from '../path-list'
-import {
-  clearResults,
-  clearQuizAttempt,
-  startGetSearchedQuiz
-} from '../actions/quizzes'
+import api from '../api'
+// import {
+//   clearResults,
+//   clearQuizAttempt,
+//   startGetSearchedQuiz
+// } from '../actions/quizzes'
 
 interface IState {
   results: any | string
 }
 
 interface IProps {
-  query: string
-  quizzes: any
-  showSearch: boolean
+  query?: string
+  quizzes?: any
+  showSearch?: boolean
   clearResults?: () => any
   clearQuizAttempt?: (any) => any
-  startGetSearchedQuiz: (quiz: any) => any
+  startGetSearchedQuiz?: (quiz: any) => any
 }
 
 export class SearchResults extends Component<IProps, IState> {
@@ -37,8 +37,9 @@ export class SearchResults extends Component<IProps, IState> {
     const { query } = props
 
     if (query.length > 0) {
-      let resultSet1 = await api.quizzes.searchByAuthor(query)
-      let resultSet2 = await api.quizzes.searchByTag(query.toLowerCase())
+      // let resultSet1 = await api.quizzes.searchByAuthor(query)
+      // let resultSet2 = await api.quizzes.searchByTag(query.toLowerCase())
+      let resultSet1, resultSet2
 
       resultSet1 = resultSet1.filter(result => result !== null)
       resultSet2 = resultSet2.filter(
@@ -118,12 +119,11 @@ export class SearchResults extends Component<IProps, IState> {
 
 const mapStateToProps = state => ({
   username: state.auth.username,
-  quizzes: state.quizzes.all,
-  searching: state.app.searching,
+  // searching: state.app.searching,
   results: state.app.results
 })
 
 export default connect(
   mapStateToProps,
-  { startGetSearchedQuiz, clearResults, clearQuizAttempt }
+  null
 )(SearchResults)

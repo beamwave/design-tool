@@ -10,18 +10,15 @@ export const login = user => ({
 })
 
 export const startLogin = credentials => {
-  console.log('in start login')
   return async dispatch => {
-    const data = await api.user.login(credentials)
-    localStorage.setItem('arsenal', data.token)
-    console.log('received data', data)
+    const userData = await api.user.login(credentials)
+    localStorage.setItem('arsenal', userData.token)
 
-    const images = await api.image.getAll(data.id)
-    console.log('images', images)
+    const imageData = await api.image.getAll(userData.id)
 
     const user = {
-      ...data,
-      images
+      ...userData,
+      imageData
     }
 
     dispatch(login(user))
@@ -34,6 +31,22 @@ export const startSignup = data => async dispatch => {
   dispatch(login(user))
 }
 
+export const startRefresh = credentials => {
+  return async dispatch => {
+    const userData = await api.user.refresh(credentials)
+    localStorage.setItem('arsenal', userData.token)
+
+    const imageData = await api.image.getAll(userData.id)
+
+    const user = {
+      ...userData,
+      imageData
+    }
+
+    dispatch(login(user))
+  }
+}
+
 export const logout = () => ({
   type: 'LOGOUT'
 })
@@ -41,22 +54,4 @@ export const logout = () => ({
 export const startLogout = () => dispatch => {
   localStorage.clear()
   dispatch(logout())
-}
-
-export const updateName = (name: string) => ({
-  type: 'UPDATE_NAME',
-  name
-})
-
-export const startUpdateName = name => dispatch => {
-  dispatch(updateName(name))
-}
-
-export const updateEmail = (email: string) => ({
-  type: 'UPDATE_EMAIL',
-  email
-})
-
-export const startUpdateEmail = email => dispatch => {
-  dispatch(updateEmail(email))
 }

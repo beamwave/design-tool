@@ -5,7 +5,7 @@ import axios from 'axios'
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome'
 
 import { Modal } from './Modal'
-import { startUpdateEmail, startUpdateName } from '../actions/auth'
+// import { startUpdateEmail, startUpdateName } from '../actions/auth'
 
 interface ClassProps {
   email: string
@@ -326,5 +326,9 @@ const mapStateToProps = state => ({
 })
 export default connect(
   mapStateToProps,
-  { startUpdateName, startUpdateEmail }
+  null
 )(SettingsPage)
+// export default connect(
+//   mapStateToProps,
+//   { startUpdateName, startUpdateEmail }
+// )(SettingsPage)

@@ -1,3 +1,6 @@
+// check existence
+export const check = obj => obj !== undefined && obj !== null
+
 // generate uuids
 export const generateUuid = () => {
   let d = new Date().getTime()

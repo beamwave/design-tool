@@ -1,7 +1,4 @@
 import User from '../../models/User'
-import Image from '../../models/Image'
-import parseErrors from '../../utils/parseErrors'
-import { verifyToken } from '../../utils/verifyToken'
 
 module.exports = app => {
   app.post('/signup', async (req, res) => {
@@ -37,58 +34,17 @@ module.exports = app => {
     }
   })
 
-  // // update user settings
-  // app.post(
-  //   '/general_settings',
-  //   verifyToken,
-  //   upload.single('file'),
-  //   (req, res) => {
-  //     const { email, username, newEmail } = req.body
-  //     User.findOne({ email: req.body.email }).then(user => {
-  //       if (newEmail.length > 0) {
-  //         user.email = newEmail
-  //       }
-  //       if (username.length > 0) {
-  //         user.username = username
-  //       }
-  //       if (req.file.path.length > 0) {
-  //         cloudinary.v2.uploader.upload(
-  //           req.file.path,
-  //           {
-  //             folder: `${user.id}/profile`, // folder name on cloudinary
-  //             tags: [user.id] // tags for images
-  //           },
-  //           (e, result) => {
-  //             if (e) {
-  //               console.log('cloudinary error: ', e) // HANDLE BETTER FOR PROD
-  //             } else {
-  //               // overwrite profile image
-  //               user.photo = result.secure_url
-  //               user.save().then(user => {
-  //                 res.json(user)
-  //               })
-  //             }
-  //           }
-  //         )
-  //       } else {
-  //         user.save().then(user => {
-  //           res.json(user)
-  //         })
-  //       }
-  //     })
-  //   }
-  // )
-  // app.post('/password_settings', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => {
-  //     if (req.body.email.length) console.log('user found man: ', user)
-  //   })
-  // })
-  // app.post('/transfer_settings', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => {
-  //     console.log('user found man: ', user)
-  //   })
-  // })
-  // app.post('/get_user', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => res.json(user))
-  // })
+  app.post('/refresh', async (req, res) => {
+    const { credentials } = req.body
+
+    console.log('hit refresh route')
+
+    const user = await User.findById(credentials.id)
+
+    try {
+      if (user) res.json({ user: user.toAuthJSON() })
+    } catch (err) {
+      res.status(500).json({ errors: { global: 'Server error.' } })
+    }
+  })
 }

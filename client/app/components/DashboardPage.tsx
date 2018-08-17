@@ -5,10 +5,12 @@ import numeral from 'numeral'
 import ReactGridGallery from 'react-grid-gallery'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome'
+import { check } from '../helpers/helpers'
 
 interface IProps {
   username: string
   category: string
+  categories?: any
   images: any[]
 }
 
@@ -18,16 +20,17 @@ interface IState {
 
 export class DashboardPage extends Component<IProps, IState> {
   state = {
-    images: []
+    images: [],
+    categories: 'map an object'
   }
 
-  check = obj => obj !== undefined && obj !== null
+  // populate
+  handleCategoryChange = e => {}
 
-  // @ts-ignore
   componentDidMount = () => {
     const { images: imagesFromServer } = this.props
     let images
-    if (this.check(imagesFromServer))
+    if (check(imagesFromServer))
       images = imagesFromServer.map(image => ({
         src: image.url,
         thumbnail: image.url,
@@ -38,11 +41,10 @@ export class DashboardPage extends Component<IProps, IState> {
     this.setState({ images })
   }
 
-  //@ts-ignore
   render = () => {
-    const { category, images: imagesFromServer } = this.props
+    const { category, categories, images: imagesFromServer } = this.props
     const { images } = this.state
-    const alive = this.check(imagesFromServer)
+    const alive = check(imagesFromServer)
     return (
       <main className="dashboard-page">
         {
@@ -55,7 +57,7 @@ export class DashboardPage extends Component<IProps, IState> {
               {alive &&
                 imagesFromServer.length > 0 && (
                   <ReactGridGallery
-                    images={this.check(imagesFromServer) ? images : []}
+                    images={check(imagesFromServer) ? images : []}
                     enableImageSelection={false}
                   />
                 )}
@@ -72,12 +74,15 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
-                      <option value="art">art</option>
-                      <option value="comments">comments</option>
-                      <option value="clothes">clothes</option>
-                      <option value="people">people</option>
+                      {categories.hasOwnProperty('medium') ? (
+                        categories['medium'].map(option => (
+                          <option value={option.id}>{option.name}</option>
+                        ))
+                      ) : (
+                        <option value="n/a">n/a</option>
+                      )}
                     </select>
                   </form>
                   <form className="filter-container">
@@ -89,12 +94,15 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
-                      <option value="art">art</option>
-                      <option value="comments">comments</option>
-                      <option value="clothes">clothes</option>
-                      <option value="people">people</option>
+                      {categories.hasOwnProperty('device') ? (
+                        categories['medium'].map(option => (
+                          <option value={option.id}>{option.name}</option>
+                        ))
+                      ) : (
+                        <option value="n/a">n/a</option>
+                      )}
                     </select>
                   </form>
                   <form className="filter-container">
@@ -106,12 +114,15 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
-                      <option value="art">art</option>
-                      <option value="comments">comments</option>
-                      <option value="clothes">clothes</option>
-                      <option value="people">people</option>
+                      {categories.hasOwnProperty('device') ? (
+                        categories['medium'].map(option => (
+                          <option value={option.id}>{option.name}</option>
+                        ))
+                      ) : (
+                        <option value="n/a">n/a</option>
+                      )}
                     </select>
                   </form>
                 </main>
@@ -127,7 +138,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -161,7 +172,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -182,7 +193,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -199,7 +210,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -220,7 +231,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -237,7 +248,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -254,7 +265,7 @@ export class DashboardPage extends Component<IProps, IState> {
                       name="select"
                       className="select"
                       value={category}
-                      // onChange={this.handleCategoryChange}
+                      onChange={this.handleCategoryChange}
                     >
                       <option value="art">art</option>
                       <option value="comments">comments</option>
@@ -368,6 +379,7 @@ const mapStateToProps = state => ({
   token: state.auth.token,
   username: state.auth.username,
   category: state.app.category,
+  categories: state.images.categories,
   images: state.images.all
 })
 

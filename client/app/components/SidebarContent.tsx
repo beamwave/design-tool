@@ -12,7 +12,6 @@ import SettingsIcon from '../../public/icons/settings-icon.svg'
 
 import { generateUuid } from '../helpers/helpers'
 import { loadModal } from '../actions/modal'
-import { changeQuestionNumber } from '../actions/quizzes'
 
 // interface IProps {
 interface IProps extends RouteComponentProps<any> {
@@ -180,7 +179,7 @@ const mapStateToProps = (state, props) => ({
 export default withRouter(
   connect<any, any>(
     mapStateToProps,
-    { loadModal, changeQuestionNumber },
+    { loadModal },
     undefined,
     { pure: false }
   )(SidebarContent)

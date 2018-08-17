@@ -4,7 +4,7 @@ import { RouteProps, withRouter } from 'react-router'
 import Modal from '../Modal'
 import { hideModal } from '../../actions/modal'
 import { FontAwesomeIcon } from '../../../../node_modules/@fortawesome/react-fontawesome'
-import { SettingsPage } from '../SettingsPage';
+import { SettingsPage } from '../SettingsPage'
 
 interface IProps {
   hideModal: () => any
@@ -16,7 +16,7 @@ export class PasswordModal extends Component<IProps> {
   //@ts-ignore
   render = () => {
     return (
-     <Modal onClose={this.onClose}>
+      <Modal onClose={this.onClose}>
         <div className="report-question-modal">
           <div className="close">
             <FontAwesomeIcon icon="times" />
