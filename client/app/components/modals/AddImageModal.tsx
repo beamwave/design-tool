@@ -3,14 +3,14 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import Modal from '../Modal'
 import { hideModal } from '../../actions/modal'
-import { startImageUpload } from '../../actions/images'
+import { startUpload } from '../../actions/images'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Dropzone from 'react-dropzone'
 
 interface IProps {
   id: string
   username: string
-  startImageUpload: (any) => any
+  startUpload: (any) => any
   hideModal: () => any
 }
 
@@ -63,10 +63,8 @@ export class AddImageModal extends Component<IProps> {
 
   submit = async () => {
     const { name, type, medium, artist, height, width, file } = this.state
-    const { id, startImageUpload } = this.props
+    const { id, startUpload } = this.props
 
-    console.log(typeof height, height)
-    console.log(typeof width, width)
     // const data = { name, type, medium, artist, file }
 
     let formData = new FormData()
@@ -84,15 +82,18 @@ export class AddImageModal extends Component<IProps> {
     //   // send file to bucket
     //   const s3upload = await axios.put(url, file)
     //   // send data to db
-    //   startImageUpload(data)
+    //   startUpload(data)
     //   this.onClose()
     // } catch (err) {
     //   console.log('error uploading to bucket', err)
     // }
 
-    console.log('form data', formData)
+    const data = {
+      formData,
+      id
+    }
 
-    startImageUpload(formData)
+    startUpload(data)
     this.onClose()
   }
 
@@ -180,7 +181,7 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { startImageUpload, hideModal }
+  { startUpload, hideModal }
 )(AddImageModal)
 
 // export default withRouter(

@@ -16,6 +16,9 @@ export default {
       axiosGuard.get('/get_images', { params: { id } }).then(res => res.data),
 
     upload: image =>
-      axiosGuard.post('/create_image', image).then(res => res.data.images)
+      axiosGuard.post('/create_image', image).then(res => res.data.images),
+
+    addTag: data =>
+      axiosGuard.post('/add_tag_to_image', data).then(res => res.data.images)
   }
 }

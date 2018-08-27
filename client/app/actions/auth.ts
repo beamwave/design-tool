@@ -2,7 +2,7 @@ import React from 'react'
 import api from '../api'
 import { environment } from '../../../environment'
 
-import { imageUpload } from './images'
+import { upload } from './images'
 
 export const login = user => ({
   type: 'LOGIN',

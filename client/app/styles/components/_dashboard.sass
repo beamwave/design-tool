@@ -25,6 +25,18 @@
 
   .image-results
 
+    .null-case
+      @include text(600, 18px)
+
+
+    .ReactGridGallery
+      .tile
+        transition: .2s all ease-in-out
+
+        &:hover
+          filter: brightness(90%)
+
+
   .primary-config
     position: absolute
     right: 4vw

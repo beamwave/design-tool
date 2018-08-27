@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
   Dropdown,
@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SearchResults from './SearchResults'
 import {
   sidebar,
+  toggleEditMode,
   changeCategory,
   trainingWheelsProtocol,
   startSearch
@@ -26,11 +27,14 @@ interface RProps {
   isAuthenticated?: boolean
   trainingWheels?: boolean
   category?: string
+  backButton?: boolean
+  history?: any
 }
 
 interface RState {
   sidebar?: any
-  startSearch?: (query: string) => any
+  startSearch?: (query: any) => any
+  toggleEditMode?: () => any
   trainingWheelsProtocol?: () => any
   changeCategory?: (string) => any
   loadModal?: (string) => any
@@ -45,18 +49,20 @@ export class Header extends Component<Props> {
     dropdownOpen: false,
     showSearch: false,
     term: '',
-    query: ''
+    editMode: false
   }
 
   toggleDropdown = () =>
     this.setState({ dropdownOpen: !this.state.dropdownOpen })
 
-  // @ts-ignore
+  toggleTrainingWheels = () => this.props.trainingWheelsProtocol()
+
+  toggleEditMode = () => this.props.toggleEditMode()
+
   // needs to be attached to document for click detection
   componentDidMount = () =>
     document.addEventListener('click', this.determineClick, false)
 
-  //@ts-ignore
   // needs to be attached to document for click detection
   componentWillUnmount = () =>
     document.removeEventListener('click', this.determineClick)
@@ -66,8 +72,6 @@ export class Header extends Component<Props> {
   handleCategoryChange = ({ target }) => {
     this.props.changeCategory(target.value)
   }
-
-  toggleTrainingWheels = () => this.props.trainingWheelsProtocol()
 
   determineClick = e => {
     // if click outside modal or not typing in input, hide search
@@ -82,17 +86,20 @@ export class Header extends Component<Props> {
 
   hideSearch = () => this.setState({ showSearch: false })
 
-  onFieldChange = async e => {
+  handleSearch = async e => {
+    // get search query
     const {
-      target: { value }
+      target: { value: query }
     } = e
-    const { startSearch } = this.props
-    this.setState({
-      term: value,
-      query: value
-    } as any)
+
+    const { category, startSearch } = this.props
+
+    // this.setState({
+    //   query
+    // } as any)
+
     // send term to database
-    // await startSearch(query)
+    await startSearch({ query, category })
   }
 
   handleSelectColor = category => {
@@ -105,11 +112,10 @@ export class Header extends Component<Props> {
   handleSubmit = e => {
     e.preventDefault()
     this.setState({
-      query: this.state.term
+      term: this.state.term
     })
   }
 
-  // @ts-ignore
   render = () => {
     const {
       photo,
@@ -117,31 +123,49 @@ export class Header extends Component<Props> {
       isAuthenticated,
       trainingWheels,
       category,
-      startLogout
+      startLogout,
+      backButton,
+      history
     } = this.props
-    const { showSearch, term, query } = this.state
+    const { showSearch, term } = this.state
 
     return (
       <header className="nav-header">
-        <SearchResults query={query} showSearch={showSearch} />
-        <div className="plus" onClick={this.addImageModal}>
-          <FontAwesomeIcon icon="plus" />
-          <p className="hint">upload image</p>
-        </div>
+        <SearchResults query={term} showSearch={showSearch} />
+        {!backButton ? (
+          <div className="plus" onClick={this.addImageModal}>
+            <FontAwesomeIcon icon="plus" />
+            <p className="hint">upload image</p>
+          </div>
+        ) : (
+          <div className="plus" onClick={() => history.goBack()}>
+            <FontAwesomeIcon icon="arrow-left" />
+            <p className="hint">go back</p>
+          </div>
+        )}
         <div className="settings">
           <FontAwesomeIcon icon="cog" />
           <p className="hint">settings</p>
         </div>
-        <div className="protocol" onClick={this.toggleTrainingWheels}>
-          {trainingWheels ? (
-            <FontAwesomeIcon icon="lock" />
-          ) : (
-            <FontAwesomeIcon icon="unlock" />
-          )}
-          <p className="hint">
-            {trainingWheels ? 'deactive' : 'active'} training wheels protocol
-          </p>
-        </div>
+        {!backButton && (
+          <div className="protocol" onClick={this.toggleTrainingWheels}>
+            {trainingWheels ? (
+              <FontAwesomeIcon icon="lock" />
+            ) : (
+              <FontAwesomeIcon icon="unlock" />
+            )}
+            <p className="hint">
+              {trainingWheels ? 'deactive' : 'active'} training wheels protocol
+              )}
+            </p>
+          </div>
+        )}
+        {backButton && (
+          <div className="protocol" onClick={this.toggleEditMode}>
+            <FontAwesomeIcon icon="sliders-h" />
+            <p className="hint">adjust image settings</p>
+          </div>
+        )}
         <div className="search-group">
           <FontAwesomeIcon icon="search" className="icon" />
           <form className="submit" onSubmit={this.handleSubmit}>
@@ -149,9 +173,9 @@ export class Header extends Component<Props> {
               type="text"
               className="input spawnSearch"
               placeholder="Search"
-              data-search={true}
-              onFocus={this.showSearch}
-              onChange={this.onFieldChange}
+              // data-search={true}
+              // onFocus={this.showSearch}
+              onChange={this.handleSearch}
               value={term}
             />
 
@@ -219,22 +243,26 @@ export class Header extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   photo: state.auth.profileImage,
   username: state.auth.username,
   isAuthenticated: !!state.auth.token,
   category: state.app.category,
-  trainingWheels: state.app.trainingWheels
+  trainingWheels: state.app.trainingWheels,
+  backButton: props.match.params._id ? true : false // for some reason this works
 })
 
-export default connect<RProps, any>(
-  mapStateToProps,
-  {
-    sidebar,
-    changeCategory,
-    trainingWheelsProtocol,
-    startSearch,
-    loadModal,
-    startLogout
-  }
-)(Header)
+export default withRouter<any>(
+  connect<RProps, any>(
+    mapStateToProps,
+    {
+      sidebar,
+      toggleEditMode,
+      changeCategory,
+      trainingWheelsProtocol,
+      startSearch,
+      loadModal,
+      startLogout
+    }
+  )(Header)
+)

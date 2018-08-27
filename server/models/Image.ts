@@ -10,7 +10,8 @@ interface IImage extends Document {
   artist: string
   palette: string
   info: string
-  comments: string[]
+  tags: any[]
+  comments: []
   height: number
   width: number
   trainingWheels: boolean
@@ -43,6 +44,9 @@ const schema: Schema = new Schema(
     },
     info: {
       type: String
+    },
+    tags: {
+      type: Array
     },
     comments: {
       type: [String]

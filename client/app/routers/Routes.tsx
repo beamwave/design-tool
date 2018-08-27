@@ -12,6 +12,7 @@ import SplashPage from '../components/SplashPage'
 import LoginPage from '../components/LoginPage'
 import SignupPage from '../components/SignupPage'
 import DashboardPage from '../components/DashboardPage'
+import ImagePage from '../components/ImagePage'
 
 import ResetPasswordPage from '../components/ResetPasswordPage'
 
@@ -83,7 +84,7 @@ export class Pages extends Component<IProps> {
           <PublicRoute path="/resetpassword" component={ResetPasswordPage} />
 
           <PrivateRoute path="/dashboard" component={DashboardPage} />
-          <PrivateRoute path="/image/:uuid" component={DashboardPage} />
+          <PrivateRoute path="/image/:_id" component={ImagePage} />
           <PrivateRoute path="/settings" component={SettingsPage} />
 
           <Route component={NotFoundPage} />

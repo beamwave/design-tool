@@ -9,6 +9,7 @@ import Artist from '../../models/Artist'
 import Image from '../../models/Image'
 import Medium from '../../models/Medium'
 import Type from '../../models/Type'
+import Tag from '../../models/Tag'
 import User from '../../models/User'
 
 import { verifyToken } from '../../utils/verifyToken'
@@ -53,113 +54,226 @@ module.exports = app => {
     })
   })
 
+  /**
+   * retrieval steps:
+   * iterate each image
+   *
+   */
+
   app.get('/get_images', verifyToken, async (req, res) => {
     // where req.params is stored from axios
     const { id } = req.query
+
     // get images with id references
-    let query = await Image.find({ owner: id }).lean()
+    let allImages = await Image.find({ owner: id }).lean()
 
-    // object to store all user categories (ie artist, type, medium) and all options
-    let categories = {}
+    if (allImages.length > 0) {
+      // object to store all user categories (ie artist, type, medium) and all options
+      let categories = {}
 
-    // get the references for each image
-    const images = await Promise.all(
-      query.map(async image => {
-        // omit these fields
-        let {
-          __v,
-          _id,
-          comments, // add back later
-          createdAt,
-          updatedAt,
-          name,
-          url,
-          owner,
-          height,
-          width,
-          trainingWheels,
-          deleted,
-          ...properties
-        } = image
+      // (images = first var)
+      // get the references for each image
+      const images = await Promise.all(
+        allImages.map(async image => {
+          // omit these fields
+          let {
+            __v,
+            _id,
+            comments, // add back later
+            createdAt,
+            updatedAt,
+            name,
+            url,
+            owner,
+            height,
+            width,
+            trainingWheels,
+            deleted,
+            ...properties
+          } = image
 
-        let propertyOverwrites = []
+          let propertyOverwrites = [],
+            imageAttributes = []
 
-        properties = await Promise.all(
-          /* [[ 'artist', '5b7022b3bedf190c3b282c04' ],
+          // console.log('properties', properties)
+
+          properties = await Promise.all(
+            // properties array =
+            /* [[ 'artist', '5b7022b3bedf190c3b282c04' ],
             [ 'medium', '5b7022b3bedf190c3b282c05' ],
             [ 'type', '5b7022b3bedf190c3b282c06' ]] */
-          Object.entries(properties).map(async prop => {
-            const reqDoc = capitalize(prop[0])
-            const schemas = {
-              Artist: Artist,
-              Image: Image,
-              Medium: Medium,
-              Type: Type
-            }
+            Object.entries(properties).map(
+              async (prop: [string, string | string[]]) => {
+                // converts each property to "Artist", "Medium", "Type", "Tags"
+                const reqDoc = capitalize(prop[0])
 
-            let doc
-            // set "doc" variable = to proper schema
-            for (let realDoc in schemas) {
-              if (reqDoc === realDoc) doc = schemas[realDoc]
-            }
+                const schemas = {
+                  Artist: Artist,
+                  Image: Image,
+                  Medium: Medium,
+                  Type: Type,
+                  Tags: Tag
+                }
 
-            // query based on doc variable (ie Artist, Medium, or Type)
-            const result = await doc.findById(prop[1]).lean()
+                // START
+                let doc
 
-            // will replace id references in image object
-            // { "medium": "web", "_id": "zi1pu5a2izm3ij234z"}
-            const identifier = {
-              name: result.name,
-              id: result._id
-            }
+                /* assign "doc" variable to proper schema within properties loop of single image */
+                for (let realDoc in schemas) {
+                  if (reqDoc === realDoc) doc = schemas[realDoc]
+                }
 
-            // adds object with categories
-            // each category contains each unique type and id (ie medium: {web, photo})
-            if (categories.hasOwnProperty(prop[0])) {
-              const existence = categories[prop[0]].some(
-                stack =>
-                  stack.name === identifier.name || stack.id === identifier.id
-              )
-              if (!existence)
-                categories[prop[0]] = [...categories[prop[0]], identifier]
-            }
-            if (!categories.hasOwnProperty(prop[0])) {
-              categories[prop[0]] = [identifier]
-            }
+                // add current attributes to growing array. Will overwrite current id reference properties on image
+                // imageAttributes = ['artist', 'image', 'medium', ...]
+                imageAttributes = [...imageAttributes, prop[0]]
 
-            const final = {}
-            final[prop[0]] = identifier
+                // case 1: object
+                // case 2: array
+                let result
 
-            propertyOverwrites.push(final)
+                if (typeof prop[1] === 'string') {
+                  console.log('prop[1] is a string: ', prop[0], prop[1])
+                  // query based on doc variable (ie Artist, Medium, or Type) if prop[1] is a string (the id)
+                  result = await doc.findById(prop[1]).lean()
+                }
+
+                // will either be comments or tags
+                if (Array.isArray(prop[1])) {
+                  console.log(
+                    'prop[1] is an array (comments | tags) :',
+                    prop[0],
+                    prop[1]
+                  )
+                  console.log('length of array is :', prop[1].length)
+
+                  // else perform iterative query based on array type doc (ie Tag, Comment)
+                  if (prop[1].length > 0) {
+                    // union type defined in function means map must be a function of string type and array type
+                    // <string[]> is a type assertion, which tells typescript prop[1] in this case is an array
+                    result = await Promise.all(
+                      (<string[]>prop[1]).map(async id => {
+                        // tag id or comment id
+                        const ealn = await doc.findById(id).lean()
+                        console.log('should be tag information...', ealn)
+                        return ealn
+                      })
+                    )
+                    console.log('result variable after tag query:', result)
+                  }
+                  if (prop[1].length === 0) {
+                    console.log('empty array: ', prop[0], prop[1])
+                  }
+                }
+
+                let identifier
+
+                // if result is an array (of tags or comment results)...
+                if (Array.isArray(result) && result !== undefined) {
+                  // then identifier will be an array of name/id objects for each tag
+                  identifier = result.map(obj => ({
+                    name: obj.name,
+                    id: obj._id
+                  }))
+                }
+
+                // else if result is an object of a single identifier...
+                if (!Array.isArray(result) && result !== undefined) {
+                  // data that will replace id references in image object
+                  /* "medium": { 
+                "name": "web", 
+                "id": "zi1pu5a2izm3ij234z"
+              }, */
+                  console.log('result not array!  should be object', result)
+
+                  identifier = {
+                    name: result.name,
+                    id: result._id
+                  }
+                }
+
+                // START 2nd Variable (categories): -------------------------------------
+                // each category contains each unique type and id (ie medium: {web, photo})
+                // if categories object has property...
+                if (categories.hasOwnProperty(prop[0])) {
+                  // and if prop[1] is a string
+                  if (typeof prop[1] === 'string') {
+                    // check if array of properties (ie artist:{name:'',id:''})) doesnt already have identifier
+                    const existence = categories[prop[0]].some(
+                      stack =>
+                        stack.name === identifier.name ||
+                        stack.id === identifier.id
+                    )
+
+                    // if it doesnt, add indentifier to it
+                    if (!existence)
+                      categories[prop[0]] = [...categories[prop[0]], identifier]
+                  }
+                }
+
+                // if categories object doesnt have property, add it
+                if (!categories.hasOwnProperty(prop[0])) {
+                  categories[prop[0]] = [identifier]
+                }
+                // END 2nd Variable (categories): -------------------------------------
+
+                /* 
+              artist: {
+                name: "unknown",
+                id: "abc123"
+              } or...
+              tags: [{
+                name: "face",
+                id: "def456"
+              }, ...]
+            */
+                const final = {}
+                final[prop[0]] = identifier
+
+                // propertyOverwrites will convert property id references to identifier objects ie [{name:"",id:""}, ...]
+                propertyOverwrites.push(final)
+              }
+            )
+          )
+
+          // add array of property names to image object
+          image['imageAttributes'] = imageAttributes
+
+          // propertyOverwrites, an array of arrays, now contains properties with correct values:
+          // [['artist', {id:..., name:...}], ['type', {id:..., name:...}], ['medium', {id:..., name:...}]]
+          propertyOverwrites = propertyOverwrites.map(overwrite => {
+            const propertyArray = Object.entries(overwrite)
+            const arr = [propertyArray[0][0], propertyArray[0][1]]
+            return arr
           })
-        )
 
-        // array of arrays ie [['artist', {id:..., name:...}], ...]
-        propertyOverwrites = propertyOverwrites.map(overwrite => {
-          const propertyArray = Object.entries(overwrite)
-          const arr = [propertyArray[0][0], propertyArray[0][1]]
-          return arr
+          // in the end, we get the original image with its original id reference properties...
+          const imageWithCorrectAttributes = {
+            ...image
+          }
+
+          // and we overwrite those id reference properties with the correct identifier data...
+          propertyOverwrites.map(property => {
+            imageWithCorrectAttributes[property[0]] = property[1]
+          })
+
+          // and return the image object with the correct data back to the images array
+          return imageWithCorrectAttributes
+
+          // END
         })
+      )
 
-        const imageWithCorrectAttributes = {
-          ...image
-        }
+      // send images to client
+      res.status(200).json({ images, categories })
+    }
 
-        // overwrite image properties containing references with actual data
-        propertyOverwrites.map(property => {
-          imageWithCorrectAttributes[property[0]] = property[1]
-        })
-
-        // return image with all data to images array
-        return imageWithCorrectAttributes
+    if (allImages.length === 0) {
+      res.status(200).json({
+        images: [],
+        categories: [],
+        tags: []
       })
-    )
-
-    // here goes nothing
-    console.log('categories: ', categories)
-
-    // send images to client
-    res.status(200).json({ images, categories })
+    }
   })
 
   app.post(
@@ -186,9 +300,7 @@ module.exports = app => {
       // get user for id
       try {
         user = await User.findById(id)
-        console.log('user found!')
       } catch (err) {
-        console.log('id is null with ', err)
         res.status(401).json({ errors: { global: 'id is null' } })
       }
 
@@ -268,7 +380,8 @@ module.exports = app => {
       try {
         await image.save()
         const images = await Image.find({ owner: user.id })
-        res.status(201).json({ images })
+        res.status(201).json()
+        // res.status(201).json({ images })
       } catch (err) {
         console.log('image save error: ', err)
         res.status(400).json({ errors: { global: err } })
@@ -277,6 +390,59 @@ module.exports = app => {
       }
     }
   )
+
+  app.post('/add_tag_to_image', verifyToken, async (req, res) => {
+    console.log('req', req.body)
+    const { userId, image: id, tag: name } = req.body
+
+    const image = await Image.findById(id)
+    console.log('image found: ', image)
+
+    if (image) {
+      console.log('found image, now finding tag', image)
+
+      const tag = await Tag.findOne({ name })
+
+      if (tag) {
+        console.log('found tag, now saving to image', tag)
+
+        // TODO: make sure image does not already have tag!
+
+        // append existing tag to image
+        image.tags = [...image.tags, tag._id]
+        tag.attachedTo = [...tag.attachedTo, image._id]
+
+        await image.save()
+        await tag.save()
+        res.sendStatus(201).json()
+      }
+
+      if (!tag) {
+        console.log('tag not found, creating a new one', tag)
+        // create new tag
+        const newTag = new Tag({
+          name,
+          user: userId,
+          attachedTo: image._id,
+          deleted: false
+        })
+
+        // save tag and create unique id
+        await newTag.save()
+
+        const savedTag = await Tag.findOne({ name })
+
+        // append new tag reference to image
+        image.tags = [...image.tags, savedTag._id]
+
+        await image.save()
+
+        res.status(201).json()
+      }
+    }
+
+    res.status(404).json({ error: 'image not found' })
+  })
 
   // app.post('/api/divvy', verifyToken, (req, res) => {
   //   User.findOne({ email: req.body.email }).then(user => {

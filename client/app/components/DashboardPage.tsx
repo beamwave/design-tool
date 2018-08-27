@@ -17,6 +17,7 @@ interface IProps {
   images: any[]
   filters?: any[]
   filter?: (by: FData) => any
+  history?: any
 }
 
 interface IState {
@@ -36,15 +37,25 @@ export class DashboardPage extends Component<IProps, IState> {
     // console.log('dataset', target.dataset.filterName)
     // console.log('value', target.value)
 
-    const by = { category: target.dataset.filterName, value: target.value }
+    const by = {
+      category: target.dataset.filterName,
+      value: target.value
+    }
 
     filter(by)
   }
 
+  handleThumbnailClick = (i, e) => {
+    const { images, history } = this.props
+    const imageId = images[i]._id
+    history.push(`/image/${imageId}`)
+  }
+
   componentDidMount = () => {
     const { images: imagesFromServer } = this.props
+    console.log('imagesFromServer', imagesFromServer)
     let images
-    if (check(imagesFromServer))
+    if (check(imagesFromServer) && Array.isArray(imagesFromServer))
       images = imagesFromServer.map(image => ({
         src: image.url,
         thumbnail: image.url,
@@ -71,13 +82,14 @@ export class DashboardPage extends Component<IProps, IState> {
             <section className="image-results">
               {alive &&
                 imagesFromServer.length === 0 && (
-                  <div>No images to display.</div>
+                  <p className="null-case">No images to display.</p>
                 )}
               {alive &&
                 imagesFromServer.length > 0 && (
                   <ReactGridGallery
                     images={check(imagesFromServer) ? images : []}
                     enableImageSelection={false}
+                    onClickThumbnail={this.handleThumbnailClick}
                   />
                 )}
             </section>
@@ -96,9 +108,12 @@ export class DashboardPage extends Component<IProps, IState> {
                       data-filter-name="medium"
                       onChange={this.handleFilterChange}
                     >
-                      {categories.hasOwnProperty('medium') ? (
+                      {categories !== undefined &&
+                      categories.hasOwnProperty('medium') ? (
                         categories['medium'].map(option => (
-                          <option value={option.name}>{option.name}</option>
+                          <option key={option.name} value={option.name}>
+                            {option.name}
+                          </option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -117,9 +132,12 @@ export class DashboardPage extends Component<IProps, IState> {
                       data-filter-name="device"
                       onChange={this.handleFilterChange}
                     >
-                      {categories.hasOwnProperty('device') ? (
+                      {categories !== undefined &&
+                      categories.hasOwnProperty('device') ? (
                         categories['medium'].map(option => (
-                          <option value={option.name}>{option.name}</option>
+                          <option key={option.name} value={option.name}>
+                            {option.name}
+                          </option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -138,9 +156,12 @@ export class DashboardPage extends Component<IProps, IState> {
                       data-filter-name="project"
                       onChange={this.handleFilterChange}
                     >
-                      {categories.hasOwnProperty('device') ? (
+                      {categories !== undefined &&
+                      categories.hasOwnProperty('device') ? (
                         categories['medium'].map(option => (
-                          <option value={option.name}>{option.name}</option>
+                          <option key={option.name} value={option.name}>
+                            {option.name}
+                          </option>
                         ))
                       ) : (
                         <option value="n/a">n/a</option>
@@ -405,7 +426,7 @@ export class DashboardPage extends Component<IProps, IState> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, props) => ({
   token: state.auth.token,
   username: state.auth.username,
   category: state.app.category,

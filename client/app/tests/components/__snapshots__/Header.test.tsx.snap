@@ -86,7 +86,7 @@ exports[`should render Header component 1`] = `
       className="hint"
     >
       active
-       training wheels protocol
+       training wheels protocol )}
     </p>
   </div>
   <div
@@ -115,9 +115,7 @@ exports[`should render Header component 1`] = `
     >
       <input
         className="input spawnSearch"
-        data-search={true}
         onChange={[Function]}
-        onFocus={[Function]}
         placeholder="Search"
         type="text"
         value=""
@@ -212,7 +210,7 @@ exports[`should render Header component 1`] = `
         className="image"
         style={
           Object {
-            "background": "url(url) center / cover no-repeat",
+            "background": "url(url) 50% 5% / 110% no-repeat",
             "marginRight": 15,
           }
         }

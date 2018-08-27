@@ -32,11 +32,16 @@ if (localStorage.getItem('arsenal')) {
     // confirmed: payload.confirmed
   }
 
-  localStorage.setItem('arsenal', userData.token)
+  let user = {
+    ...userData,
+    imageData: []
+  }
+
+  store.dispatch(login(user))
 
   const fetchImages = async () => {
     const imageData = await api.image.getAll(userData.id)
-    const user = {
+    user = {
       ...userData,
       imageData
     }

@@ -1,7 +1,8 @@
 import React from 'react'
 
 const initialState = {
-  trainingWheels: true
+  trainingWheels: true,
+  editMode: false
 }
 
 export const appReducer = (state = initialState, action = {} as any) => {
@@ -22,6 +23,12 @@ export const appReducer = (state = initialState, action = {} as any) => {
       return {
         ...state,
         sidebarOpen: action.bool
+      }
+
+    case 'EDIT':
+      return {
+        ...state,
+        editMode: !state.editMode
       }
 
     case 'CATEGORY':

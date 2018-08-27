@@ -4,7 +4,6 @@ import React from 'react'
 export const authReducer = (state = {}, action: any = {}) => {
   switch (action.type) {
     case 'LOGIN':
-      console.log('auth reducer action ', action)
       return {
         id: action.user.id,
         name: action.user.name,

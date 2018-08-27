@@ -1,0 +1,185 @@
+
+.image-page
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  grid-template-rows: repeat(2, max-content)
+  grid-column-gap: 35px
+  height: 75vh
+  width: 75vw
+  margin: 25px auto 0
+  box-sizing: border-box
+
+  header
+    display: grid
+    grid-row: 1
+    grid-column: 1 / span 2
+    grid-template-columns: repeat(2, max-content)
+    grid-column-gap: 10px
+    align-items: center
+    padding-bottom: 25px
+
+    h1
+      margin: 0
+      width: 70vw
+      white-space: nowrap
+      overflow: hidden
+      text-overflow: ellipsis
+      @include text(700, 24px)
+      color: $grey
+
+    .locksmith
+      .icon
+        margin: 2px 0 0 0
+        font-size: 22px
+        color: $light-grey
+
+  main
+    display: grid
+    grid-row: 2
+    grid-template-rows: repeat(2, max-content)
+
+    img
+      object-fit: contain
+      background-color: $white-grey
+
+    .caption
+      display: grid
+      grid-template-columns: repeat(2, max-content)
+      justify-content: space-between
+      padding: 5px 10px 15px
+      @include text(600, 18px)
+
+      p
+        margin: 0
+
+      .tags
+        display: grid
+        grid-template-columns: repeat(3, max-content)
+        grid-column-gap: 5px
+        align-items: center
+
+        .plus-icon
+          color: $light-grey
+          transition: .3s all ease-in-out
+
+          &:hover
+            cursor: pointer
+            filter: brightness(90%)
+
+        .tag-list
+          display: grid
+          grid-auto-flow: column
+          grid-auto-columns: max-content
+          grid-column-gap: 5px
+          border: 1px solid red
+          width: 22vw
+          white-space: nowrap
+          overflow-x: scroll
+          text-overflow: ellipsis
+
+          &::-webkit-scrollbar
+            height: 0
+            // size
+            width: 0
+            // scroll background
+            -webkit-box-shadow: none
+
+          p
+            // margin: 0
+
+        .plus-icon
+          color: $light-grey
+          transition: .3s all ease-in-out
+
+          &:hover
+            cursor: pointer
+            filter: brightness(90%)
+
+        .tag-form
+          display: grid
+          grid-template-rows: repeat(2, max-content)
+          padding: 10px 15px
+          border-radius: 8px
+
+          input
+            padding: 10px 15px
+            border: none
+            border-radius: 8px
+            outline: none
+            @include text(600, 18px)
+            background-color: $white-grey
+
+            &::placeholder
+              @include text(600, 18px)
+
+      .dimensions
+        display: grid
+
+
+  aside
+    display: grid
+    grid-template-columns: repeat(2, max-content)
+    grid-column-gap: 10px
+
+    .properties
+      display: grid
+      grid-auto-rows: max-content
+      grid-row-gap: 5px
+
+      p
+        @include text(600, 18px)
+        margin: 10px 0
+
+    .values
+      display: grid
+      grid-auto-rows: max-content
+      grid-row-gap: 5px
+      align-items: center
+
+      p
+        width: 20vw
+        margin: 10px 0
+        white-space: nowrap
+        overflow: hidden
+        @include text(700, 18px)
+        text-overflow: ellipsis
+        color: $grey
+      
+      input
+        padding: 5px 10px
+        margin: 5px 0
+        width: 150%
+        box-sizing: border-box
+        outline: none
+        border: none
+        border-radius: 4px
+        @include text(700, 18px)
+        color: $grey
+        background-color: $white-grey
+
+        &:focus
+          background-color: darken($white-grey, 5%)
+
+
+
+
+// &::-webkit-scrollbar
+  //   // size
+  //   width: 7px
+  //   // scroll background
+  //   -webkit-box-shadow: none
+
+  // &::-webkit-scrollbar-thumb
+  //   // bar color
+  //   background-color: $light-grey
+  //   opacity: .5
+  //   // bar curve
+  //   border-radius: 25px
+
+  // .image-results
+  //   .ReactGridGallery
+  //     .tile
+  //       transition: .2s all ease-in-out
+
+  //       &:hover
+  //         filter: brightness(90%)
