@@ -46,7 +46,7 @@
       display: grid
       grid-template-columns: repeat(2, max-content)
       justify-content: space-between
-      padding: 5px 10px 15px
+      padding: 5px 5px 15px
       @include text(600, 18px)
 
       p
@@ -54,10 +54,15 @@
 
       .tags
         display: grid
-        grid-template-columns: repeat(3, max-content)
-        grid-column-gap: 5px
+        // plus button, tag-list, dimensions
+        grid-template-columns: repeat(4, max-content)
+        grid-column-gap: 20px
         align-items: center
 
+        // container of plus button
+        button
+          padding: 0
+
         .plus-icon
           color: $light-grey
           transition: .3s all ease-in-out
@@ -66,34 +71,57 @@
             cursor: pointer
             filter: brightness(90%)
 
+  
         .tag-list
           display: grid
-          grid-auto-flow: column
-          grid-auto-columns: max-content
-          grid-column-gap: 5px
-          border: 1px solid red
-          width: 22vw
-          white-space: nowrap
-          overflow-x: scroll
-          text-overflow: ellipsis
+          // left arrow, tags, right arrow
+          grid-template-columns: 15px 1fr 12px
+          grid-column-gap: 10px
+          align-items: center
+          max-width: 325px
+          margin-top: -2px
 
-          &::-webkit-scrollbar
-            height: 0
-            // size
-            width: 0
-            // scroll background
-            -webkit-box-shadow: none
+          .content
+            display: grid
+            grid-auto-flow: column
+            grid-auto-columns: max-content
+            grid-column-gap: 5px
+            white-space: nowrap
+            overflow-x: scroll
+            text-overflow: ellipsis
 
-          p
-            // margin: 0
+            &::-webkit-scrollbar
+              height: 0
+              // size
+              width: 0
+              // scroll background
+              -webkit-box-shadow: none
 
-        .plus-icon
-          color: $light-grey
-          transition: .3s all ease-in-out
+            p
+              transition: .3s all ease-in-out
 
-          &:hover
-            cursor: pointer
-            filter: brightness(90%)
+              &:hover
+                cursor: pointer
+                filter: brightness(90%)
+
+
+          .angle-left-icon, .angle-right-icon
+            display: grid
+            justify-items: center
+            box-sizing: border-box
+            font-size: 24px
+            color: $light-grey
+            transition: .3s all ease-in-out
+
+            &:hover
+              cursor: pointer
+              filter: brightness(90%)
+
+          .angle-left-icon
+            padding: 3px 3px 0 0
+            
+          .angle-right-icon
+            padding: 3px 0 0 3px
 
         .tag-form
           display: grid

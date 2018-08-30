@@ -2,7 +2,11 @@ import React from 'react'
 import api from '../api'
 
 export const upload = imageData => ({
-  type: 'CREATE_IMAGE',
+  type: 'UPLOAD_IMAGE',
+  imageData
+})
+export const query = imageData => ({
+  type: 'QUERY_BY_TAGS',
   imageData
 })
 
@@ -25,6 +29,18 @@ export const startAddTag = data => async dispatch => {
 
   // get all images
   const imageData = await api.image.getAll(data.userId)
+
+  // update store with images
+  dispatch(upload(imageData))
+}
+
+export const startSearchByTag = data => async dispatch => {
+  // add tag to image
+  const addTag = await api.image.addTag(data)
+
+  // get all images
+  // should include id, and array of tags
+  const imageData = await api.image.getAllByTags(data)
 
   // update store with images
   dispatch(upload(imageData))

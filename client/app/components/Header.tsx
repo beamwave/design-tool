@@ -17,6 +17,7 @@ import {
   trainingWheelsProtocol,
   startSearch
 } from '../actions/app'
+import { startSearchByTag } from '../actions/images'
 import { startLogout } from '../actions/auth'
 import { loadModal } from '../actions/modal'
 import { ADD_IMAGE_MODAL } from '../constants/modaltypes'
@@ -34,6 +35,7 @@ interface RProps {
 interface RState {
   sidebar?: any
   startSearch?: (query: any) => any
+  startSearchByTag?: (data: any) => any
   toggleEditMode?: () => any
   trainingWheelsProtocol?: () => any
   changeCategory?: (string) => any
@@ -260,6 +262,7 @@ export default withRouter<any>(
       toggleEditMode,
       changeCategory,
       trainingWheelsProtocol,
+      startSearchByTag,
       startSearch,
       loadModal,
       startLogout

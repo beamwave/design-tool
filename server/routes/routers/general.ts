@@ -69,6 +69,7 @@ module.exports = app => {
 
     if (allImages.length > 0) {
       // object to store all user categories (ie artist, type, medium) and all options
+      let tags = []
       let categories = {}
 
       // (images = first var)
@@ -132,20 +133,12 @@ module.exports = app => {
                 let result
 
                 if (typeof prop[1] === 'string') {
-                  console.log('prop[1] is a string: ', prop[0], prop[1])
                   // query based on doc variable (ie Artist, Medium, or Type) if prop[1] is a string (the id)
                   result = await doc.findById(prop[1]).lean()
                 }
 
                 // will either be comments or tags
                 if (Array.isArray(prop[1])) {
-                  console.log(
-                    'prop[1] is an array (comments | tags) :',
-                    prop[0],
-                    prop[1]
-                  )
-                  console.log('length of array is :', prop[1].length)
-
                   // else perform iterative query based on array type doc (ie Tag, Comment)
                   if (prop[1].length > 0) {
                     // union type defined in function means map must be a function of string type and array type
@@ -153,15 +146,9 @@ module.exports = app => {
                     result = await Promise.all(
                       (<string[]>prop[1]).map(async id => {
                         // tag id or comment id
-                        const ealn = await doc.findById(id).lean()
-                        console.log('should be tag information...', ealn)
-                        return ealn
+                        return await doc.findById(id).lean()
                       })
                     )
-                    console.log('result variable after tag query:', result)
-                  }
-                  if (prop[1].length === 0) {
-                    console.log('empty array: ', prop[0], prop[1])
                   }
                 }
 
@@ -174,24 +161,28 @@ module.exports = app => {
                     name: obj.name,
                     id: obj._id
                   }))
+
+                  // START 2nd variable (tags): -------------------------------------
+                  if (prop[0].toLowerCase() === 'tags') {
+                    tags = [...tags, ...result]
+                  }
+                  // END 2nd variable (tags): -------------------------------------
                 }
 
                 // else if result is an object of a single identifier...
                 if (!Array.isArray(result) && result !== undefined) {
                   // data that will replace id references in image object
                   /* "medium": { 
-                "name": "web", 
-                "id": "zi1pu5a2izm3ij234z"
-              }, */
-                  console.log('result not array!  should be object', result)
-
+                      "name": "web", 
+                      "id": "zi1pu5a2izm3ij234z"
+                    }, */
                   identifier = {
                     name: result.name,
                     id: result._id
                   }
                 }
 
-                // START 2nd Variable (categories): -------------------------------------
+                // START 3rd variable (categories): -------------------------------------
                 // each category contains each unique type and id (ie medium: {web, photo})
                 // if categories object has property...
                 if (categories.hasOwnProperty(prop[0])) {
@@ -210,11 +201,11 @@ module.exports = app => {
                   }
                 }
 
-                // if categories object doesnt have property, add it
+                // if categories object doesn't have property, add it
                 if (!categories.hasOwnProperty(prop[0])) {
                   categories[prop[0]] = [identifier]
                 }
-                // END 2nd Variable (categories): -------------------------------------
+                // END 3nd variable (categories): -------------------------------------
 
                 /* 
               artist: {
@@ -263,8 +254,13 @@ module.exports = app => {
         })
       )
 
+      // converts array with duplicate objects into unique array
+      tags = Object.values(
+        tags.reduce((acc, cur) => Object.assign(acc, { [cur._id]: cur }), {})
+      )
+
       // send images to client
-      res.status(200).json({ images, categories })
+      res.status(200).json({ images, tags, categories })
     }
 
     if (allImages.length === 0) {
@@ -274,6 +270,11 @@ module.exports = app => {
         tags: []
       })
     }
+  })
+
+  app.get('/query_images', verifyToken, async (req, res) => {
+    const { id, tags, filters } = req.query
+    console.log('query', req.query)
   })
 
   app.post(
@@ -392,14 +393,11 @@ module.exports = app => {
   )
 
   app.post('/add_tag_to_image', verifyToken, async (req, res) => {
-    console.log('req', req.body)
-    const { userId, image: id, tag: name } = req.body
+    const { userId, image: id, name } = req.body
 
     const image = await Image.findById(id)
-    console.log('image found: ', image)
-
     if (image) {
-      console.log('found image, now finding tag', image)
+      console.log('id', id, 'tag', name)
 
       const tag = await Tag.findOne({ name })
 

@@ -21,7 +21,6 @@ export const authReducer = (state = {}, action: any = {}) => {
       }
 
     case 'UPDATE_USER':
-      console.log('now updating user in reducer')
       return {
         ...state,
         email: action.user.email,
@@ -41,7 +40,6 @@ export const authReducer = (state = {}, action: any = {}) => {
       }
 
     case 'UPDATE_USER':
-      console.log('now updating user in reducer')
       return {
         ...state,
         email: action.user.email,

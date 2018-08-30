@@ -15,6 +15,11 @@ export default {
     getAll: id =>
       axiosGuard.get('/get_images', { params: { id } }).then(res => res.data),
 
+    getAllByTags: ({ id, tags }) =>
+      axiosGuard
+        .get('/query_images', { params: { id, tags } })
+        .then(res => res.data),
+
     upload: image =>
       axiosGuard.post('/create_image', image).then(res => res.data.images),
 

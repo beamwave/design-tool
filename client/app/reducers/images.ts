@@ -6,21 +6,22 @@ export const imageReducer = (state = {}, action = {} as any) => {
       console.log('login action..', action)
       return {
         all: action.user.imageData.images,
+        tags: action.user.imageData.tags,
         categories: action.user.imageData.categories
       }
 
-    case 'CREATE_IMAGE':
+    case 'UPLOAD_IMAGE':
       return {
         ...state,
         all: action.imageData.images,
+        tags: action.imageData.tags,
         categories: action.imageData.categories
       }
 
-    case 'UPDATE_IMAGE':
+    case 'QUERY_BY_TAGS':
       return {
         ...state,
-        all: action.imageData.images,
-        categories: action.imageData.categories
+        all: action.imageData.images
       }
 
     case 'DELETE_IMAGE':

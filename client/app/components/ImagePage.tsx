@@ -21,14 +21,16 @@ interface IProps {
 
 interface IState {
   tagDropdownOpen: boolean
-  tag: string
+  tagName: string
+  tagScrollbars: boolean
 }
 
 export class ImagePage extends Component<IProps, IState> {
   state = {
     image: this.props.image,
     tagDropdownOpen: false,
-    tag: ''
+    tagScrollbars: false,
+    tagName: ''
   }
 
   private tagContainerWidth = createRef<HTMLDivElement>()
@@ -44,19 +46,23 @@ export class ImagePage extends Component<IProps, IState> {
       target: { value: input }
     } = e
 
+    // letters (case-insensitive), numbers, hash
+    // TODO: cannot start with numbers
     const regex = /^[a-zA-Z\d\#]+$/
 
     if ((!input || input.match(regex)) && input.length < 18) {
-      this.setState(() => ({ tag: input }))
+      this.setState(() => ({ tagName: input }))
     }
   }
 
   private handleSubmit = async e => {
     e.preventDefault()
 
-    const { tag } = this.state
+    const { tagName } = this.state
     const { id, image, startAddTag } = this.props
-    const data = { userId: id, image: image._id, tag }
+    const data = { userId: id, image: image._id, name: tagName }
+
+    console.log('data', data)
 
     await startAddTag(data)
     this.toggleTagDropdown()
@@ -90,7 +96,8 @@ export class ImagePage extends Component<IProps, IState> {
     const tagContent = this.tagContentWidth.current
 
     // client width, scroll width, offset width
-    if (tagContainer.clientWidth > tagContent.scrollWidth) {
+    if (tagContainer.clientWidth < tagContent.scrollWidth) {
+      this.setState({ tagScrollbars: true })
     }
   }
 
@@ -101,7 +108,7 @@ export class ImagePage extends Component<IProps, IState> {
 
   public render = () => {
     const { editMode } = this.props
-    const { tag, image, tagDropdownOpen } = this.state
+    const { tagName, image, tagScrollbars, tagDropdownOpen } = this.state
     const extraneous = [
       '_id',
       'url',
@@ -144,7 +151,7 @@ export class ImagePage extends Component<IProps, IState> {
                 className="dropdown-root"
               >
                 <DropdownToggle className="dropdown-toggle">
-                  <FontAwesomeIcon icon="plus" className="icon" />
+                  <FontAwesomeIcon icon="plus" className="plus-icon" />
                 </DropdownToggle>
                 <DropdownMenu
                   className="dropdown-menu"
@@ -155,7 +162,7 @@ export class ImagePage extends Component<IProps, IState> {
                   <form className="tag-form" onSubmit={this.handleSubmit}>
                     <input
                       type="text"
-                      value={tag}
+                      value={tagName}
                       placeholder={'New tag...'}
                       onChange={this.handleTextValidation}
                     />
@@ -163,6 +170,11 @@ export class ImagePage extends Component<IProps, IState> {
                 </DropdownMenu>
               </Dropdown>
               <div className="tag-list" ref={this.tagContainerWidth}>
+                {tagScrollbars && (
+                  <div className="angle-left-icon">
+                    <FontAwesomeIcon icon="angle-left" />
+                  </div>
+                )}
                 <div className="content" ref={this.tagContentWidth}>
                   {image.tags !== undefined &&
                     image.tags.map(tag => (
@@ -171,6 +183,11 @@ export class ImagePage extends Component<IProps, IState> {
                       </p>
                     ))}
                 </div>
+                {tagScrollbars && (
+                  <div className="angle-right-icon">
+                    <FontAwesomeIcon icon="angle-right" />
+                  </div>
+                )}
               </div>
             </div>
             <div className="dimensions">
