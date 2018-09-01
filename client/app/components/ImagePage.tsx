@@ -115,12 +115,11 @@ export class ImagePage extends Component<IProps, IState> {
       'owner',
       'height',
       'width',
+      'tags',
       'comments', // deactivate later
       'trainingWheels',
       'imageAttributes',
       'deleted',
-      // 'createdAt',
-      // 'updatedAt',
       '__v'
     ]
     const artDefaults = ['device', 'palette']

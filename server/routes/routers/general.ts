@@ -273,8 +273,11 @@ module.exports = app => {
   })
 
   app.get('/query_images', verifyToken, async (req, res) => {
-    const { id, tags, filters } = req.query
     console.log('query', req.query)
+    const { id, tags, filters = {} } = req.query
+    console.log('id', id)
+    console.log('tags', tags)
+    console.log('filters', filters)
   })
 
   app.post(

@@ -5,6 +5,7 @@ export const upload = imageData => ({
   type: 'UPLOAD_IMAGE',
   imageData
 })
+
 export const query = imageData => ({
   type: 'QUERY_BY_TAGS',
   imageData

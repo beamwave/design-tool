@@ -3,7 +3,6 @@ import React from 'react'
 export const imageReducer = (state = {}, action = {} as any) => {
   switch (action.type) {
     case 'LOGIN':
-      console.log('login action..', action)
       return {
         all: action.user.imageData.images,
         tags: action.user.imageData.tags,
@@ -22,6 +21,13 @@ export const imageReducer = (state = {}, action = {} as any) => {
       return {
         ...state,
         all: action.imageData.images
+      }
+
+    case 'SEARCH':
+      console.log('and this is the action', action)
+      return {
+        ...state,
+        all: action.data.images
       }
 
     case 'DELETE_IMAGE':

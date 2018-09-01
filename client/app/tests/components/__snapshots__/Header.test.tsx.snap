@@ -4,10 +4,6 @@ exports[`should render Header component 1`] = `
 <header
   className="nav-header"
 >
-  <Connect(SearchResults)
-    query=""
-    showSearch={false}
-  />
   <div
     className="plus"
     onClick={[Function]}
@@ -111,7 +107,6 @@ exports[`should render Header component 1`] = `
     />
     <form
       className="submit"
-      onSubmit={[Function]}
     >
       <input
         className="input spawnSearch"

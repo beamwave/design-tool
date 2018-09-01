@@ -9,14 +9,15 @@ import {
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import SearchResults from './SearchResults'
+// import SearchResults from './SearchResults'
 import {
   sidebar,
   toggleEditMode,
   changeCategory,
-  trainingWheelsProtocol,
-  startSearch
+  trainingWheelsProtocol
 } from '../actions/app'
+// choose one of the below
+import { search, startSearch } from '../actions/filter'
 import { startSearchByTag } from '../actions/images'
 import { startLogout } from '../actions/auth'
 import { loadModal } from '../actions/modal'
@@ -34,6 +35,7 @@ interface RProps {
 
 interface RState {
   sidebar?: any
+  search?: any
   startSearch?: (query: any) => any
   startSearchByTag?: (data: any) => any
   toggleEditMode?: () => any
@@ -50,8 +52,8 @@ export class Header extends Component<Props> {
     category: this.props.category,
     dropdownOpen: false,
     showSearch: false,
-    term: '',
-    editMode: false
+    editMode: false,
+    query: ''
   }
 
   toggleDropdown = () =>
@@ -94,14 +96,16 @@ export class Header extends Component<Props> {
       target: { value: query }
     } = e
 
-    const { category, startSearch } = this.props
+    const { category, search, startSearch } = this.props
 
-    // this.setState({
-    //   query
-    // } as any)
+    this.setState({ query })
 
+    const data = { tags: query.split(','), type: 'comments' }
+
+    startSearch(data)
     // send term to database
-    await startSearch({ query, category })
+    // await startSearch(data)
+    // search(data)
   }
 
   handleSelectColor = category => {
@@ -111,12 +115,12 @@ export class Header extends Component<Props> {
     if (category === 'people') return 'select grey'
   }
 
-  handleSubmit = e => {
-    e.preventDefault()
-    this.setState({
-      term: this.state.term
-    })
-  }
+  // handleSubmit = e => {
+  //   e.preventDefault()
+  //   this.setState({
+  //     term: this.state.term
+  //   })
+  // }
 
   render = () => {
     const {
@@ -129,11 +133,10 @@ export class Header extends Component<Props> {
       backButton,
       history
     } = this.props
-    const { showSearch, term } = this.state
+    const { showSearch, query } = this.state
 
     return (
       <header className="nav-header">
-        <SearchResults query={term} showSearch={showSearch} />
         {!backButton ? (
           <div className="plus" onClick={this.addImageModal}>
             <FontAwesomeIcon icon="plus" />
@@ -170,15 +173,13 @@ export class Header extends Component<Props> {
         )}
         <div className="search-group">
           <FontAwesomeIcon icon="search" className="icon" />
-          <form className="submit" onSubmit={this.handleSubmit}>
+          <form className="submit">
             <input
               type="text"
               className="input spawnSearch"
               placeholder="Search"
-              // data-search={true}
-              // onFocus={this.showSearch}
               onChange={this.handleSearch}
-              value={term}
+              value={query}
             />
 
             <div className="type-choice">
@@ -263,6 +264,7 @@ export default withRouter<any>(
       changeCategory,
       trainingWheelsProtocol,
       startSearchByTag,
+      search,
       startSearch,
       loadModal,
       startLogout

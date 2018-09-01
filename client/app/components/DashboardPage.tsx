@@ -53,7 +53,7 @@ export class DashboardPage extends Component<IProps, IState> {
 
   componentDidMount = () => {
     const { images: imagesFromServer } = this.props
-    console.log('imagesFromServer', imagesFromServer)
+    // console.log('imagesFromServer', imagesFromServer)
     let images
     if (check(imagesFromServer) && Array.isArray(imagesFromServer))
       images = imagesFromServer.map(image => ({

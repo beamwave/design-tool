@@ -1,13 +1,27 @@
 import React from 'react'
 
-export const filterReducer = (state = {}, action = {} as any) => {
+interface IState {
+  search: string
+}
+
+export const filterReducer = (state = {} as IState, action = {} as any) => {
   switch (action.type) {
     case 'LOGIN':
       let filters = {}
       for (let category in action.user.imageData.categories)
         filters[category] = false
       return {
-        ...filters
+        ...filters,
+        search: '',
+        type: '' // default type on load
+      }
+
+    case 'SEARCH':
+      console.log('')
+      return {
+        ...state,
+        search: state.search + action.data.search,
+        type: action.data.type
       }
 
     case 'FILTER':
