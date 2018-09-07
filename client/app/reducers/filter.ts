@@ -11,17 +11,7 @@ export const filterReducer = (state = {} as IState, action = {} as any) => {
       for (let category in action.user.imageData.categories)
         filters[category] = false
       return {
-        ...filters,
-        search: '',
-        type: '' // default type on load
-      }
-
-    case 'SEARCH':
-      console.log('')
-      return {
-        ...state,
-        search: state.search + action.data.search,
-        type: action.data.type
+        ...filters
       }
 
     case 'FILTER':

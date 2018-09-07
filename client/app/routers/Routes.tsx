@@ -73,25 +73,22 @@ export class Pages extends Component<IProps> {
   // shouldComponentUpdate = () => false
 
   // @ts-ignore
-  render = () => {
-    // const { sidebarDocked } = this.state
-    return (
-      <Router history={history}>
-        <Switch>
-          <PublicRoute exact path="/" component={SplashPage} />
-          <PublicRoute path="/signup" component={SignupPage} />
-          <PublicRoute path="/login" component={LoginPage} />
-          <PublicRoute path="/resetpassword" component={ResetPasswordPage} />
+  render = () => (
+    <Router history={history}>
+      <Switch>
+        <PublicRoute exact path="/" component={SplashPage} />
+        <PublicRoute path="/signup" component={SignupPage} />
+        <PublicRoute path="/login" component={LoginPage} />
+        <PublicRoute path="/resetpassword" component={ResetPasswordPage} />
 
-          <PrivateRoute path="/dashboard" component={DashboardPage} />
-          <PrivateRoute path="/image/:_id" component={ImagePage} />
-          <PrivateRoute path="/settings" component={SettingsPage} />
+        <PrivateRoute path="/dashboard" component={DashboardPage} />
+        <PrivateRoute path="/image/:_id" component={ImagePage} />
+        <PrivateRoute path="/settings" component={SettingsPage} />
 
-          <Route component={NotFoundPage} />
-        </Switch>
-      </Router>
-    )
-  }
+        <Route component={NotFoundPage} />
+      </Switch>
+    </Router>
+  )
 }
 
 const mapStateToProps = state => ({

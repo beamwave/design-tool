@@ -2,7 +2,8 @@ import React from 'react'
 
 const initialState = {
   trainingWheels: true,
-  editMode: false
+  editMode: false,
+  query: ''
 }
 
 export const appReducer = (state = initialState, action = {} as any) => {
@@ -13,7 +14,8 @@ export const appReducer = (state = initialState, action = {} as any) => {
         dataIsHere: true,
         category: 'art',
         sidebarOpen: false,
-        trainingWheels: true
+        trainingWheels: true,
+        query: ''
       }
 
     case 'LOGOUT':
@@ -29,6 +31,12 @@ export const appReducer = (state = initialState, action = {} as any) => {
       return {
         ...state,
         editMode: !state.editMode
+      }
+
+    case 'QUERY':
+      return {
+        ...state,
+        query: action.query
       }
 
     case 'CATEGORY':

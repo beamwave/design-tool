@@ -107,6 +107,7 @@ exports[`should render Header component 1`] = `
     />
     <form
       className="submit"
+      onSubmit={[Function]}
     >
       <input
         className="input spawnSearch"
@@ -140,7 +141,9 @@ exports[`should render Header component 1`] = `
           />
         </div>
         <select
+          className="select teal"
           onChange={[Function]}
+          value="art"
         >
           <option
             value="art"

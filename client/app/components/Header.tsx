@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
@@ -7,18 +7,17 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap'
+// import { throttle, debounce } from 'lodash'
+import { throttle, debounce } from 'throttle-debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-// import SearchResults from './SearchResults'
 import {
   sidebar,
   toggleEditMode,
   changeCategory,
   trainingWheelsProtocol
 } from '../actions/app'
-// choose one of the below
-import { search, startSearch } from '../actions/filter'
-import { startSearchByTag } from '../actions/images'
+import { query, startSearch } from '../actions/filter'
 import { startLogout } from '../actions/auth'
 import { loadModal } from '../actions/modal'
 import { ADD_IMAGE_MODAL } from '../constants/modaltypes'
@@ -28,6 +27,8 @@ interface RProps {
   username?: string
   isAuthenticated?: boolean
   trainingWheels?: boolean
+  query?: any
+  input?: string
   category?: string
   backButton?: boolean
   history?: any
@@ -37,7 +38,6 @@ interface RState {
   sidebar?: any
   search?: any
   startSearch?: (query: any) => any
-  startSearchByTag?: (data: any) => any
   toggleEditMode?: () => any
   trainingWheelsProtocol?: () => any
   changeCategory?: (string) => any
@@ -49,11 +49,15 @@ type Props = RProps & RState
 
 export class Header extends Component<Props> {
   state = {
-    category: this.props.category,
+    data: {
+      query: '',
+      category: 'art'
+      // category: this.props.category && this.props.category
+    },
+    input: '',
     dropdownOpen: false,
     showSearch: false,
-    editMode: false,
-    query: ''
+    editMode: false
   }
 
   toggleDropdown = () =>
@@ -64,8 +68,12 @@ export class Header extends Component<Props> {
   toggleEditMode = () => this.props.toggleEditMode()
 
   // needs to be attached to document for click detection
-  componentDidMount = () =>
+  componentDidMount = () => {
+    const input = this.inputRef.current
+    if (input) input.focus()
+
     document.addEventListener('click', this.determineClick, false)
+  }
 
   // needs to be attached to document for click detection
   componentWillUnmount = () =>
@@ -90,23 +98,53 @@ export class Header extends Component<Props> {
 
   hideSearch = () => this.setState({ showSearch: false })
 
-  handleSearch = async e => {
-    // get search query
+  // debounce = (fn, time) => {
+  //   let timeout
+
+  //   return function() {
+  //     const functionCall = () => fn.apply(this, arguments)
+
+  //     clearTimeout(timeout)
+  //     timeout = setTimeout(functionCall, time)
+  //   }
+  // }
+
+  // const { target: { value: input } } = e
+
+  // is debounced for 5 seconds, but then makes calls for every keystroke
+  // private handleCall = data => console.log('handling call!')
+  private handleCall = async data => this.props.startSearch(data)
+
+  // should debounce action creator in handleCall for 5 seconds
+  private startSearchDebounce = debounce(3000, this.handleCall)
+
+  private handleText = input => this.setState({ input })
+
+  private handleSearch = async e => {
+    e.preventDefault()
+    // value from onChange
     const {
-      target: { value: query }
+      target: { value: input }
     } = e
+    const { category, startSearch } = this.props
+    // const { category, query, startSearch } = this.props
 
-    const { category, search, startSearch } = this.props
+    this.handleText(input)
 
-    this.setState({ query })
+    // query(input)
+    // data sent to action creator
+    const data = {
+      input,
+      tags: input.replace(/\s/g, '').split(','),
+      category: category
+    }
 
-    const data = { tags: query.split(','), type: 'comments' }
-
-    startSearch(data)
-    // send term to database
-    // await startSearch(data)
-    // search(data)
+    // this.startSearchDebounce()
+    this.startSearchDebounce(data)
   }
+
+  // throttle(2000, data => this.props.startSearch(data))
+  // startSearchThrottled = throttle(3000, data => this.props.startSearch(data))
 
   handleSelectColor = category => {
     if (category === 'art') return 'select teal'
@@ -115,12 +153,7 @@ export class Header extends Component<Props> {
     if (category === 'people') return 'select grey'
   }
 
-  // handleSubmit = e => {
-  //   e.preventDefault()
-  //   this.setState({
-  //     term: this.state.term
-  //   })
-  // }
+  private inputRef = React.createRef<HTMLInputElement>()
 
   render = () => {
     const {
@@ -128,12 +161,14 @@ export class Header extends Component<Props> {
       username,
       isAuthenticated,
       trainingWheels,
-      category,
       startLogout,
       backButton,
       history
     } = this.props
-    const { showSearch, query } = this.state
+    const {
+      input,
+      data: { category }
+    } = this.state
 
     return (
       <header className="nav-header">
@@ -173,13 +208,14 @@ export class Header extends Component<Props> {
         )}
         <div className="search-group">
           <FontAwesomeIcon icon="search" className="icon" />
-          <form className="submit">
+          <form className="submit" onSubmit={this.handleSearch}>
             <input
               type="text"
               className="input spawnSearch"
               placeholder="Search"
               onChange={this.handleSearch}
-              value={query}
+              value={input}
+              ref={this.inputRef}
             />
 
             <div className="type-choice">
@@ -260,12 +296,11 @@ export default withRouter<any>(
     mapStateToProps,
     {
       sidebar,
+      query,
+      startSearch,
       toggleEditMode,
       changeCategory,
       trainingWheelsProtocol,
-      startSearchByTag,
-      search,
-      startSearch,
       loadModal,
       startLogout
     }

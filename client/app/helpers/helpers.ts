@@ -1,3 +1,67 @@
+// deep comparison of two arrays of objects
+export const deepEquals = (a, b) => {
+  if (a instanceof Array && b instanceof Array) return arraysEqual(a, b)
+  if (
+    Object.getPrototypeOf(a) === Object.prototype &&
+    Object.getPrototypeOf(b) === Object.prototype
+  )
+    return objectsEqual(a, b)
+  if (a instanceof Map && b instanceof Map) return mapsEqual(a, b)
+  if (a instanceof Set && b instanceof Set)
+    throw 'Error: set equality by hashing not implemented.'
+  if (
+    (a instanceof ArrayBuffer || ArrayBuffer.isView(a)) &&
+    (b instanceof ArrayBuffer || ArrayBuffer.isView(b))
+  )
+    return typedArraysEqual(a, b)
+
+  return a == b // see note[1] -- IMPORTANT
+}
+
+const arraysEqual = (a, b) => {
+  if (a.length != b.length) return false
+  for (let i = 0; i < a.length; i++) if (!deepEquals(a[i], b[i])) return false
+
+  return true
+}
+const objectsEqual = (a, b) => {
+  let aKeys = Object.getOwnPropertyNames(a)
+  let bKeys = Object.getOwnPropertyNames(b)
+  if (aKeys.length != bKeys.length) return false
+  aKeys.sort()
+  bKeys.sort()
+  for (let i = 0; i < aKeys.length; i++)
+    if (aKeys[i] != bKeys[i])
+      // keys must be strings
+      return false
+
+  return deepEquals(aKeys.map(k => a[k]), aKeys.map(k => b[k]))
+}
+const mapsEqual = (a, b) => {
+  if (a.size != b.size) return false
+  let aPairs = Array.from(a)
+  let bPairs = Array.from(b)
+  aPairs.sort((x, y): any => x[0] < y[0])
+  bPairs.sort((x, y): any => x[0] < y[0])
+  for (let i = 0; i < a.length; i++)
+    if (
+      !deepEquals(aPairs[i][0], bPairs[i][0]) ||
+      !deepEquals(aPairs[i][1], bPairs[i][1])
+    )
+      return false
+
+  return true
+}
+
+const typedArraysEqual = (a, b) => {
+  a = new Uint8Array(a)
+  b = new Uint8Array(b)
+  if (a.length != b.length) return false
+  for (let i = 0; i < a.length; i++) if (a[i] != b[i]) return false
+
+  return true
+}
+
 // check existence
 export const check = obj => obj !== undefined && obj !== null
 

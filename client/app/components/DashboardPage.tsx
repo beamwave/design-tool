@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import ReactGridGallery from 'react-grid-gallery'
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome'
-import { check } from '../helpers/helpers'
+import { check, deepEquals } from '../helpers/helpers'
 import { filter } from '../actions/filter'
 
 interface FData {
@@ -64,6 +64,27 @@ export class DashboardPage extends Component<IProps, IState> {
       }))
 
     this.setState({ images })
+  }
+
+  componentWillReceiveProps = (nextProps, nextState) => {
+    if (
+      check(nextProps.images) &&
+      Array.isArray(nextProps.images) &&
+      (check(this.state.images) && Array.isArray(this.state.images))
+    ) {
+      if (!deepEquals(nextProps.images, this.state.images.length)) {
+        // if (nextProps.images.length !== this.state.images.length) {
+        let { images } = nextProps
+        images = images.map(image => ({
+          src: image.url,
+          thumbnail: image.url,
+          thumbnailHeight: image.height,
+          thumbnailWidth: image.width
+        }))
+
+        this.setState({ images })
+      }
+    }
   }
 
   render = () => {
@@ -437,5 +458,7 @@ const mapStateToProps = (state, props) => ({
 
 export default connect<any>(
   mapStateToProps,
-  { filter }
+  { filter },
+  null,
+  { pure: false }
 )(DashboardPage)

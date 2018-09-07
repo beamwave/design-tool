@@ -64,203 +64,14 @@ module.exports = app => {
     // where req.params is stored from axios
     const { id } = req.query
 
-    // get images with id references
     let allImages = await Image.find({ owner: id }).lean()
 
     if (allImages.length > 0) {
-      // object to store all user categories (ie artist, type, medium) and all options
-      let tags = []
-      let categories = {}
+      // get all the images
+      const threeProngedImageData = await queryImages(id, allImages)
 
-      // (images = first var)
-      // get the references for each image
-      const images = await Promise.all(
-        allImages.map(async image => {
-          // omit these fields
-          let {
-            __v,
-            _id,
-            comments, // add back later
-            createdAt,
-            updatedAt,
-            name,
-            url,
-            owner,
-            height,
-            width,
-            trainingWheels,
-            deleted,
-            ...properties
-          } = image
-
-          let propertyOverwrites = [],
-            imageAttributes = []
-
-          // console.log('properties', properties)
-
-          properties = await Promise.all(
-            // properties array =
-            /* [[ 'artist', '5b7022b3bedf190c3b282c04' ],
-            [ 'medium', '5b7022b3bedf190c3b282c05' ],
-            [ 'type', '5b7022b3bedf190c3b282c06' ]] */
-            Object.entries(properties).map(
-              async (prop: [string, string | string[]]) => {
-                // converts each property to "Artist", "Medium", "Type", "Tags"
-                const reqDoc = capitalize(prop[0])
-
-                const schemas = {
-                  Artist: Artist,
-                  Image: Image,
-                  Medium: Medium,
-                  Type: Type,
-                  Tags: Tag
-                }
-
-                // START
-                let doc
-
-                /* assign "doc" variable to proper schema within properties loop of single image */
-                for (let realDoc in schemas) {
-                  if (reqDoc === realDoc) doc = schemas[realDoc]
-                }
-
-                // add current attributes to growing array. Will overwrite current id reference properties on image
-                // imageAttributes = ['artist', 'image', 'medium', ...]
-                imageAttributes = [...imageAttributes, prop[0]]
-
-                // case 1: object
-                // case 2: array
-                let result
-
-                if (typeof prop[1] === 'string') {
-                  // query based on doc variable (ie Artist, Medium, or Type) if prop[1] is a string (the id)
-                  result = await doc.findById(prop[1]).lean()
-                }
-
-                // will either be comments or tags
-                if (Array.isArray(prop[1])) {
-                  // else perform iterative query based on array type doc (ie Tag, Comment)
-                  if (prop[1].length > 0) {
-                    // union type defined in function means map must be a function of string type and array type
-                    // <string[]> is a type assertion, which tells typescript prop[1] in this case is an array
-                    result = await Promise.all(
-                      (<string[]>prop[1]).map(async id => {
-                        // tag id or comment id
-                        return await doc.findById(id).lean()
-                      })
-                    )
-                  }
-                }
-
-                let identifier
-
-                // if result is an array (of tags or comment results)...
-                if (Array.isArray(result) && result !== undefined) {
-                  // then identifier will be an array of name/id objects for each tag
-                  identifier = result.map(obj => ({
-                    name: obj.name,
-                    id: obj._id
-                  }))
-
-                  // START 2nd variable (tags): -------------------------------------
-                  if (prop[0].toLowerCase() === 'tags') {
-                    tags = [...tags, ...result]
-                  }
-                  // END 2nd variable (tags): -------------------------------------
-                }
-
-                // else if result is an object of a single identifier...
-                if (!Array.isArray(result) && result !== undefined) {
-                  // data that will replace id references in image object
-                  /* "medium": { 
-                      "name": "web", 
-                      "id": "zi1pu5a2izm3ij234z"
-                    }, */
-                  identifier = {
-                    name: result.name,
-                    id: result._id
-                  }
-                }
-
-                // START 3rd variable (categories): -------------------------------------
-                // each category contains each unique type and id (ie medium: {web, photo})
-                // if categories object has property...
-                if (categories.hasOwnProperty(prop[0])) {
-                  // and if prop[1] is a string
-                  if (typeof prop[1] === 'string') {
-                    // check if array of properties (ie artist:{name:'',id:''})) doesnt already have identifier
-                    const existence = categories[prop[0]].some(
-                      stack =>
-                        stack.name === identifier.name ||
-                        stack.id === identifier.id
-                    )
-
-                    // if it doesnt, add indentifier to it
-                    if (!existence)
-                      categories[prop[0]] = [...categories[prop[0]], identifier]
-                  }
-                }
-
-                // if categories object doesn't have property, add it
-                if (!categories.hasOwnProperty(prop[0])) {
-                  categories[prop[0]] = [identifier]
-                }
-                // END 3nd variable (categories): -------------------------------------
-
-                /* 
-              artist: {
-                name: "unknown",
-                id: "abc123"
-              } or...
-              tags: [{
-                name: "face",
-                id: "def456"
-              }, ...]
-            */
-                const final = {}
-                final[prop[0]] = identifier
-
-                // propertyOverwrites will convert property id references to identifier objects ie [{name:"",id:""}, ...]
-                propertyOverwrites.push(final)
-              }
-            )
-          )
-
-          // add array of property names to image object
-          image['imageAttributes'] = imageAttributes
-
-          // propertyOverwrites, an array of arrays, now contains properties with correct values:
-          // [['artist', {id:..., name:...}], ['type', {id:..., name:...}], ['medium', {id:..., name:...}]]
-          propertyOverwrites = propertyOverwrites.map(overwrite => {
-            const propertyArray = Object.entries(overwrite)
-            const arr = [propertyArray[0][0], propertyArray[0][1]]
-            return arr
-          })
-
-          // in the end, we get the original image with its original id reference properties...
-          const imageWithCorrectAttributes = {
-            ...image
-          }
-
-          // and we overwrite those id reference properties with the correct identifier data...
-          propertyOverwrites.map(property => {
-            imageWithCorrectAttributes[property[0]] = property[1]
-          })
-
-          // and return the image object with the correct data back to the images array
-          return imageWithCorrectAttributes
-
-          // END
-        })
-      )
-
-      // converts array with duplicate objects into unique array
-      tags = Object.values(
-        tags.reduce((acc, cur) => Object.assign(acc, { [cur._id]: cur }), {})
-      )
-
-      // send images to client
-      res.status(200).json({ images, tags, categories })
+      // send images to client | threeProngedImageData = { images, tags, categories }
+      res.status(200).json(threeProngedImageData)
     }
 
     if (allImages.length === 0) {
@@ -274,10 +85,17 @@ module.exports = app => {
 
   app.get('/query_images', verifyToken, async (req, res) => {
     console.log('query', req.query)
-    const { id, tags, filters = {} } = req.query
+    const { id, tags: tagFilters, type = {} } = req.query
+
+    const allImages = await Image.find({ owner: id }).lean()
+
+    const threeProngedImageData = await queryImages(id, allImages, tagFilters)
+
     console.log('id', id)
-    console.log('tags', tags)
-    console.log('filters', filters)
+    console.log('tagFilters', tagFilters)
+    console.log('type', type)
+
+    res.status(200).json(threeProngedImageData)
   })
 
   app.post(
@@ -444,139 +262,229 @@ module.exports = app => {
 
     res.status(404).json({ error: 'image not found' })
   })
+}
 
-  // app.post('/api/divvy', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => {
-  //     const input = req.body.income
-  //     user.wants.forEach(want => {
-  //       if (!want.completed) {
-  //         const multiplier = want.percent / 100
-  //         const haul = input * multiplier
-  //         const revenue = want.progress + haul
-  //         // console.log(
-  //         //   `
-  //         //   ------------------------------------------------------------
-  //         //   stats:
-  //         //   name : ${want.name}
-  //         //   input (req.body.income): ${req.body.income}
-  //         //   multiplier (want.percent / 100): ${multiplier}
-  //         //   want.goal: ${want.goal}
-  //         //   want.progress: ${want.progress}
-  //         //   haul (input * multiplier): ${haul}
-  //         //   revenue (want.progress + haul): ${revenue}
-  //         //   `
-  //         // )
-  //         // console.log('\nis revenue > want.goal? ', revenue > want.goal)
-  //         if (revenue > want.goal) {
-  //           // add this accounts points to global
-  //           user.points += want.percent
-  //           // remove completed goals points
-  //           want.percent = 0
-  //           // store excess cash
-  //           const leftover = revenue - want.goal
-  //           // console.log(
-  //           //   `leftover (revenue (${revenue}) - want.goal (${
-  //           //     want.goal
-  //           //   })):  ${leftover}`
-  //           // )
-  //           // add excess cash to global
-  //           user.undistributedCash += leftover
-  //           // set progress exactly equal to goal
-  //           want.progress += haul - leftover
-  //           // console.log(
-  //           //   `want.progress += (haul - leftover):
-  //           //   want.progress: ${want.progress} +=
-  //           //   haul: ${haul} -
-  //           //   leftover: ${leftover}`
-  //           // )
-  //           // set want as finished
-  //           want.completed = true
-  //           // store date completed
-  //           want.dateCompleted = moment()
-  //         } else {
-  //           // add cash to account
-  //           want.progress += haul
-  //         }
-  //       }
-  //     })
-  //     let rearrange = []
-  //     const incomplete = user.wants.filter(want => {
-  //       if (want.completed) {
-  //         rearrange.push(want)
-  //       }
-  //       return !want.completed
-  //     })
-  //     rearrange.forEach(want => {
-  //       incomplete.push(want)
-  //     })
-  //     user.wants = incomplete
-  //     // console.log('rearrange: ', rearrange)
-  //     // console.log('incomplete: ', incomplete)
-  //     user.needs.forEach(need => {
-  //       const multiplier = need.percent / 100
-  //       const haul = input * multiplier
-  //       // console.log('need haul: ', haul)
-  //       need.total += haul
-  //     })
-  //     user.save().then(user => res.json(user))
-  //   })
-  // })
-  // app.post('/api/purchase', verifyToken, (req, res) => {
-  //   const { email } = req.body
-  //   User.findOne({ email }).then(user => {
-  //     console.log('user found.')
-  //   })
-  // })
-  // // delete a single want or need
-  // app.post('/api/delete', verifyToken, (req, res) => {
-  //   console.log('delete route hit.')
-  //   const { email, _id, type } = req.body
-  //   console.log(email, _id, type)
-  //   User.findOne({ email }).then(user => {
-  //     const percent =
-  //       type === 'want'
-  //         ? user.wants.id(_id).percent
-  //         : user.needs.id(_id).percent
-  //     const progress =
-  //       type === 'want'
-  //         ? user.wants.id(_id).progress
-  //         : user.needs.id(_id).progress
-  //     user.wants =
-  //       type === 'want'
-  //         ? user.wants.filter((want, i) => want.id !== _id)
-  //         : user.wants
-  //     user.needs =
-  //       type === 'want'
-  //         ? user.needs.filter((need, i) => need.id !== _id)
-  //         : user.needs
-  //     user.undistributedCash += progress
-  //     user.points += percent
-  //     user.save().then(user => res.json(user))
-  //   })
-  // })
-  // // erase all cash
-  // app.post('/api/wipe', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => {
-  //     user.wants.forEach(want => (want.progress = 0))
-  //     user.needs.forEach(need => (need.total = 0))
-  //     user.undistributedCash = 0
-  //     user.save().then(user => res.json(user))
-  //   })
-  // })
-  // // destroy all accounts
-  // app.post('/api/nuke', verifyToken, (req, res) => {
-  //   User.findOne({ email: req.body.email }).then(user => {
-  //     user.wants = []
-  //     user.needs = []
-  //     user.undistributedCash = 0
-  //     user.points = 100
-  //     // delete all images from users cloudinary folder
-  //     cloudinary.v2.api.delete_resources_by_prefix(`${user.id}/wants`, result =>
-  //       cloudinary.v2.api.delete_resources_by_prefix(
-  //         `${user.id}/needs`,
-  //         result => user.save().then(user => res.json(user))
-  //       )
-  //     )
-  //   })
-  // })
+const queryImages = async (id, userImages, tagFilters = []) => {
+  // get images with id references
+  // object to store all user categories (ie artist, type, medium) and all options
+  let tags = []
+  let categories = {}
+  let allImages = userImages
+
+  // (images = first var)
+  // get the references for each image
+  let images: any[] = await Promise.all(
+    allImages.map(async image => {
+      // omit these fields
+      let {
+        __v,
+        _id,
+        comments, // add back later
+        createdAt,
+        updatedAt,
+        name,
+        url,
+        owner,
+        height,
+        width,
+        trainingWheels,
+        deleted,
+        ...properties
+      } = image
+
+      let propertyOverwrites = [],
+        imageAttributes = []
+
+      // console.log('properties', properties)
+
+      properties = await Promise.all(
+        // properties array =
+        /* [[ 'artist', '5b7022b3bedf190c3b282c04' ],
+            [ 'medium', '5b7022b3bedf190c3b282c05' ],
+            [ 'type', '5b7022b3bedf190c3b282c06' ]] */
+        Object.entries(properties).map(
+          async (prop: [string, string | string[]]) => {
+            // converts each property to "Artist", "Medium", "Type", "Tags"
+            const reqDoc = capitalize(prop[0])
+
+            const schemas = {
+              Artist: Artist,
+              Image: Image,
+              Medium: Medium,
+              Type: Type,
+              Tags: Tag
+            }
+
+            // START
+            let doc
+
+            /* assign "doc" variable to proper schema within properties loop of single image */
+            for (let realDoc in schemas) {
+              if (reqDoc === realDoc) doc = schemas[realDoc]
+            }
+
+            // add current attributes to growing array. Will overwrite current id reference properties on image
+            // imageAttributes = ['artist', 'image', 'medium', ...]
+            imageAttributes = [...imageAttributes, prop[0]]
+
+            // case 1: object
+            // case 2: array
+            let result
+
+            if (typeof prop[1] === 'string') {
+              // query based on doc variable (ie Artist, Medium, or Type) if prop[1] is a string (the id)
+              result = await doc.findById(prop[1]).lean()
+            }
+
+            // will either be comments or tags
+            if (Array.isArray(prop[1])) {
+              // else perform iterative query based on array type doc (ie Tag, Comment)
+              if (prop[1].length > 0) {
+                // union type defined in function means map must be a function of string type and array type
+                // <string[]> is a type assertion, which tells typescript prop[1] in this case is an array
+                result = await Promise.all(
+                  (<string[]>prop[1]).map(async id => {
+                    // tag id or comment id
+                    return await doc.findById(id).lean()
+                  })
+                )
+              }
+            }
+
+            let identifier
+
+            // if result is an array (of tags or comment results)...
+            if (Array.isArray(result) && result !== undefined) {
+              // then identifier will be an array of name/id objects for each tag
+              identifier = result.map(obj => ({
+                name: obj.name,
+                id: obj._id
+              }))
+
+              // START 2nd variable (tags): -------------------------------------
+              if (prop[0].toLowerCase() === 'tags') {
+                tags = [...tags, ...result]
+              }
+              // END 2nd variable (tags): -------------------------------------
+            }
+
+            // else if result is an object of a single identifier...
+            if (!Array.isArray(result) && result !== undefined) {
+              // data that will replace id references in image object
+              /* "medium": { 
+                      "name": "web", 
+                      "id": "zi1pu5a2izm3ij234z"
+                    }, */
+              identifier = {
+                name: result.name,
+                id: result._id
+              }
+            }
+
+            // START 3rd variable (categories): -------------------------------------
+            // each category contains each unique type and id (ie medium: {web, photo})
+            // if categories object has property...
+            if (categories.hasOwnProperty(prop[0])) {
+              // and if prop[1] is a string
+              if (typeof prop[1] === 'string') {
+                // check if array of properties (ie artist:{name:'',id:''})) doesnt already have identifier
+                const existence = categories[prop[0]].some(
+                  stack =>
+                    stack.name === identifier.name || stack.id === identifier.id
+                )
+
+                // if it doesnt, add indentifier to it
+                if (!existence)
+                  categories[prop[0]] = [...categories[prop[0]], identifier]
+              }
+            }
+
+            // if categories object doesn't have property, add it
+            if (!categories.hasOwnProperty(prop[0])) {
+              categories[prop[0]] = [identifier]
+            }
+            // END 3nd variable (categories): -------------------------------------
+
+            /* 
+              artist: {
+                name: "unknown",
+                id: "abc123"
+              } or...
+              tags: [{
+                name: "face",
+                id: "def456"
+              }, ...]
+            */
+            const final = {}
+            final[prop[0]] = identifier
+
+            // propertyOverwrites will convert property id references to identifier objects ie [{name:"",id:""}, ...]
+            propertyOverwrites.push(final)
+          }
+        )
+      )
+
+      // add array of property names to image object
+      image['imageAttributes'] = imageAttributes
+
+      // propertyOverwrites, an array of arrays, now contains properties with correct values:
+      // [['artist', {id:..., name:...}], ['type', {id:..., name:...}], ['medium', {id:..., name:...}]]
+      propertyOverwrites = propertyOverwrites.map(overwrite => {
+        const propertyArray = Object.entries(overwrite)
+        const arr = [propertyArray[0][0], propertyArray[0][1]]
+        return arr
+      })
+
+      // in the end, we get the original image with its original id reference properties...
+      const imageWithCorrectAttributes = {
+        ...image
+      }
+
+      // and we overwrite those id reference properties with the correct identifier data...
+      propertyOverwrites.map(property => {
+        imageWithCorrectAttributes[property[0]] = property[1]
+      })
+
+      // and return the image object with the correct data back to the images array
+      return imageWithCorrectAttributes
+
+      // END
+    })
+  )
+
+  // filter images by tags if tagFilters are passed in
+  try {
+    console.log('tag filters', tagFilters)
+    if (tagFilters.length > 0 && tagFilters[0].length > 0) {
+      images = images.filter(image => {
+        if (image.tags !== undefined) {
+          const imageTagNames = image.tags.map(tag => tag.name)
+
+          let imageHasRequiredTags = true
+          tagFilters.map(tagFilter => {
+            const hasTag = imageTagNames.some(tag => {
+              return tag.includes(tagFilter)
+              // return tag[0] === tagFilter[0] && tag.includes(tagFilter)
+            })
+
+            if (!hasTag) {
+              imageHasRequiredTags = false
+            }
+          })
+
+          if (imageHasRequiredTags) return image
+        }
+      })
+
+      // converts array with duplicate objects into unique array
+      tags = Object.values(
+        tags.reduce((acc, cur) => Object.assign(acc, { [cur._id]: cur }), {})
+      )
+
+      return { images, tags, categories }
+    }
+    return { images, tags, categories }
+  } catch (err) {
+    console.log('Error: ', err)
+  }
 }

@@ -1,10 +1,6 @@
 import React from 'react'
 import api from '../api'
-
-export const search = data => ({
-  type: 'SEARCH',
-  data
-})
+import { throttle, debounce } from 'throttle-debounce'
 
 // Do I really need this? Dashboard does, but...
 export const filter = data => ({
@@ -12,36 +8,30 @@ export const filter = data => ({
   data
 })
 
-export const startSearch = data => {
-  return async (dispatch, getState) => {
-    // if type is unchanged, just filter ?
+export const search = data => ({
+  type: 'SEARCH',
+  data
+})
 
-    const query = {
+export const query = query => dispatch =>
+  dispatch({
+    type: 'QUERY',
+    query
+  })
+
+export const startSearch = data => {
+  console.log('in action creator!')
+  return async (dispatch, getState) => {
+    const conditions = {
       ...data,
       id: getState().auth.id
     }
 
-    console.log('in search action', query, getState())
+    // send api call here
+    const imageResultsByTag = await api.image.getAllByTags(conditions)
 
-    // else, send type and query to db
-    const imageResultsByTag = await api.image.getAllByTags(query)
-    // just a tag search right ?
-
-    console.log('results', imageResultsByTag)
-
-    const queryResults = {}
-
+    console.log('the image results:', imageResultsByTag)
+    // then dispatch image results to store
     return dispatch(search(imageResultsByTag))
-
-    // const quizzesByAuthors = await api.quizzes.searchByAuthor(query)
-    // const quizzesByTags = await api.quizzes.searchByTag(query)
-    // let quizzesByAuthors, quizzesByTags
-
-    // const quizResults = {
-    //   ...quizzesByAuthors,
-    //   ...quizzesByTags
-    // }
-
-    // return dispatch(search(quizResults))
   }
 }

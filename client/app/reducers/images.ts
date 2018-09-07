@@ -24,7 +24,7 @@ export const imageReducer = (state = {}, action = {} as any) => {
       }
 
     case 'SEARCH':
-      console.log('and this is the action', action)
+      console.log('in reducer before return!')
       return {
         ...state,
         all: action.data.images

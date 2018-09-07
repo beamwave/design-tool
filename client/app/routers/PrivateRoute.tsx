@@ -32,7 +32,8 @@ interface DispatchProps {
 type Props = StateProps & DispatchProps & RouteProps
 
 class PrivateRoute extends Component<Props> {
-  // @ts-ignore
+  componentDidMount = () => console.log('private route re-rendered!')
+
   render = () => {
     const {
       sidebar,
@@ -78,6 +79,7 @@ export default connect<StateProps, DispatchProps, RouteProps>(
   null,
   null,
   {
-    pure: false
+    pure: true
+    // pure: false
   }
 )(PrivateRoute)
