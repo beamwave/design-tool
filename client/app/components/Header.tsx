@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap'
-// import { throttle, debounce } from 'lodash'
 import { throttle, debounce } from 'throttle-debounce'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -98,25 +97,11 @@ export class Header extends Component<Props> {
 
   hideSearch = () => this.setState({ showSearch: false })
 
-  // debounce = (fn, time) => {
-  //   let timeout
-
-  //   return function() {
-  //     const functionCall = () => fn.apply(this, arguments)
-
-  //     clearTimeout(timeout)
-  //     timeout = setTimeout(functionCall, time)
-  //   }
-  // }
-
-  // const { target: { value: input } } = e
-
-  // is debounced for 5 seconds, but then makes calls for every keystroke
-  // private handleCall = data => console.log('handling call!')
   private handleCall = async data => this.props.startSearch(data)
 
   // should debounce action creator in handleCall for 5 seconds
-  private startSearchDebounce = debounce(3000, this.handleCall)
+  private startSearchDebounce = debounce(1000, this.handleCall)
+  private startSearchThrottle = throttle(750, this.handleCall)
 
   private handleText = input => this.setState({ input })
 
@@ -127,11 +112,9 @@ export class Header extends Component<Props> {
       target: { value: input }
     } = e
     const { category, startSearch } = this.props
-    // const { category, query, startSearch } = this.props
 
     this.handleText(input)
 
-    // query(input)
     // data sent to action creator
     const data = {
       input,
@@ -139,12 +122,12 @@ export class Header extends Component<Props> {
       category: category
     }
 
-    // this.startSearchDebounce()
-    this.startSearchDebounce(data)
+    if (input.length < 5) {
+      this.startSearchThrottle(data)
+    } else {
+      this.startSearchDebounce(data)
+    }
   }
-
-  // throttle(2000, data => this.props.startSearch(data))
-  // startSearchThrottled = throttle(3000, data => this.props.startSearch(data))
 
   handleSelectColor = category => {
     if (category === 'art') return 'select teal'
@@ -231,6 +214,13 @@ export class Header extends Component<Props> {
                 <option value="comments">comments</option>
                 <option value="clothes">clothes</option>
                 <option value="people">people</option>
+                <option value="music">music</option>
+                <option value="quora">quora</option>
+                <option value="bookmarks">bookmarks</option>
+                <option value="recipes">recipes</option>
+                <option value="vocabulary">vocabulary</option>
+                <option value="notes">notes</option>
+                <option value="timeline">timeline</option>
               </select>
             </div>
             <div className="search-options">

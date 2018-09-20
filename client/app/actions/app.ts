@@ -1,10 +1,10 @@
 import React from 'react'
 import api from '../api'
 
-export const sidebar = bool => dispatch =>
+export const sidebar = boolean => dispatch =>
   dispatch({
     type: 'SIDEBAR',
-    bool
+    boolean
   })
 
 export const changeCategory = option => dispatch =>

@@ -24,7 +24,7 @@ export const appReducer = (state = initialState, action = {} as any) => {
     case 'SIDEBAR':
       return {
         ...state,
-        sidebarOpen: action.bool
+        sidebarOpen: action.boolean
       }
 
     case 'EDIT':

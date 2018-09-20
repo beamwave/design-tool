@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
-import { search } from '../../actions/filter'
+import { upload } from '../../actions/images'
+import { generateUuid } from '../../helpers/helpers'
 
-test('should test search action', () => {
-  const action = search('mock-query')
+test('should setup upload action object', () => {
+  const id = generateUuid()
+  const imageData = {
+    id,
+    name: 'Zombie Playground',
+    type: 'art',
+    medium: 'digital',
+    artist: 'Jason Chan',
+    height: 400,
+    width: 500,
+    trainingWheels: '0',
+    file: 'file'
+  }
+
+  const action = upload(imageData)
 
   expect(action).toEqual({
-    type: 'SEARCH',
-    query: 'mock-query'
-  })
-})
-
-test('should test sidebar action', () => {
-  const action = search('mock-query')
-
-  expect(action).toEqual({
-    type: 'SEARCH',
-    query: 'mock-query'
+    type: 'UPLOAD_IMAGE',
+    imageData
   })
 })

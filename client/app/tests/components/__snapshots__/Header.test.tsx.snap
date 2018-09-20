@@ -165,6 +165,41 @@ exports[`should render Header component 1`] = `
           >
             people
           </option>
+          <option
+            value="music"
+          >
+            music
+          </option>
+          <option
+            value="quora"
+          >
+            quora
+          </option>
+          <option
+            value="bookmarks"
+          >
+            bookmarks
+          </option>
+          <option
+            value="recipes"
+          >
+            recipes
+          </option>
+          <option
+            value="vocabulary"
+          >
+            vocabulary
+          </option>
+          <option
+            value="notes"
+          >
+            notes
+          </option>
+          <option
+            value="timeline"
+          >
+            timeline
+          </option>
         </select>
       </div>
       <div

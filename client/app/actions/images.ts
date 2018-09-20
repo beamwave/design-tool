@@ -6,11 +6,6 @@ export const upload = imageData => ({
   imageData
 })
 
-export const query = imageData => ({
-  type: 'QUERY_BY_TAGS',
-  imageData
-})
-
 export const startUpload = data => async dispatch => {
   const { formData, id } = data
 
